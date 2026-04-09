@@ -1,0 +1,27 @@
+{
+  "database_path": "/storage/emulated/0/Documents/repos/wellbeing-archivist/data/real-chat-package-archivist.db",
+  "roots": [
+    "/storage/emulated/0/Documents/Blagopoluchie/00_INBOX/my-structure/chats-gpt-name/revision-of-the-project-structure"
+  ],
+  "exclude_dirs": [
+    ".git",
+    ".venv",
+    "__pycache__",
+    "node_modules"
+  ],
+  "text_extensions": [
+    ".md",
+    ".txt",
+    ".tsv",
+    ".csv",
+    ".json",
+    ".yaml",
+    ".yml",
+    ".log",
+    ".sh",
+    ".html"
+  ],
+  "max_text_file_size_bytes": 1000000,
+  "log_level": "INFO",
+  "fts_enabled": false
+}
