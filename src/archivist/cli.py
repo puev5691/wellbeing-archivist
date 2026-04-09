@@ -4,6 +4,7 @@ import argparse
 from pathlib import Path
 
 from .config import load_config
+from .copy_map import parse_copy_map
 from .db import Database
 from .indexer import Indexer
 from .logging_setup import setup_logging
@@ -45,6 +46,12 @@ def build_parser() -> argparse.ArgumentParser:
     )
     show_chat_package.add_argument("package_id", type=int)
 
+    show_copy_map = subparsers.add_parser(
+        "show-copy-map",
+        help="Show parsed .wb-copy-map.tsv for a chat package by package ID",
+    )
+    show_copy_map.add_argument("package_id", type=int)
+
     return parser
 
 
@@ -75,6 +82,9 @@ def main() -> int:
 
     if args.command == "show-chat-package":
         return cmd_show_chat_package(args)
+
+    if args.command == "show-copy-map":
+        return cmd_show_copy_map(args)
 
     parser.error(f"Unknown command: {args.command}")
     return 2
@@ -186,4 +196,33 @@ def cmd_show_chat_package(args) -> int:
 
     for key, value in data.items():
         print(f"{key}: {value}")
+    return 0
+
+
+def cmd_show_copy_map(args) -> int:
+    db = _db_from_args(args)
+    package = db.get_chat_package_by_id(args.package_id)
+    if package is None:
+        print("Chat package not found.")
+        return 1
+
+    copy_map_path = package.get("copy_map_file_path")
+    if not copy_map_path:
+        print("Copy map is not set for this chat package.")
+        return 1
+
+    entries = parse_copy_map(copy_map_path)
+    if not entries:
+        print("Copy map is empty.")
+        return 0
+
+    print(f"Copy map for package: {package.get('package_name')}")
+    print(f"  package_path: {package.get('package_path')}")
+    print(f"  copy_map_file_path: {copy_map_path}")
+    print()
+
+    for idx, entry in enumerate(entries, start=1):
+        print(f"[{idx}] {entry.source_filename}")
+        print(f"  target_relative_directory: {entry.target_relative_directory}")
+
     return 0
