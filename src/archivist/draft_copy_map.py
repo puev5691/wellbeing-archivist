@@ -3,6 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 
+from .classify_files import classify_file
+
 
 @dataclass(slots=True)
 class DraftCopyMapEntry:
@@ -10,40 +12,21 @@ class DraftCopyMapEntry:
     suggested_target_relative_directory: str
 
 
-EXCLUDED_FILENAMES = {
-    "README-chat-folder.md",
-    ".wb-copy-map.tsv",
-    ".wb-copy-map.generated.tsv",
-    ".wb-copy-map.candidate.tsv",
-    ".wb-copy-map.append.tsv",
-    "chat-card.md",
-}
-
-EXCLUDED_SUFFIXES = {
-    ".sh",
-}
-
-EXCLUDED_PREFIXES = {
-    ".",
+EXCLUDED_FILE_TYPES = {
+    "readme",
+    "copy_map",
+    "copy_map_generated",
+    "chat_card",
+    "script",
+    "scratch",
+    "demo",
+    "noncanonical_name",
 }
 
 
 def should_exclude_file(path: Path) -> bool:
-    name = path.name
-
-    if name in EXCLUDED_FILENAMES:
-        return True
-
-    if name.startswith(".wb-copy-map.") and name.endswith(".tsv"):
-        return True
-
-    if path.suffix.lower() in EXCLUDED_SUFFIXES:
-        return True
-
-    if any(name.startswith(prefix) for prefix in EXCLUDED_PREFIXES):
-        return True
-
-    return False
+    classified = classify_file(path)
+    return classified.file_type in EXCLUDED_FILE_TYPES
 
 
 def suggest_target_directory(filename: str) -> str:
@@ -88,7 +71,5 @@ def collect_draft_copy_map_entries(package_path: str | Path) -> list[DraftCopyMa
 def render_draft_copy_map(entries: list[DraftCopyMapEntry]) -> str:
     lines = ["# filename<TAB>relative-canonical-directory"]
     for entry in entries:
-        lines.append(
-            f"{entry.source_filename}\t{entry.suggested_target_relative_directory}"
-        )
+        lines.append(f"{entry.source_filename}\t{entry.suggested_target_relative_directory}")
     return "\n".join(lines) + "\n"

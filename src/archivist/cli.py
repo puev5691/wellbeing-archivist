@@ -13,6 +13,7 @@ from .db import Database
 from .draft_copy_map import collect_draft_copy_map_entries, render_draft_copy_map
 from .indexer import Indexer
 from .logging_setup import setup_logging
+from .package_status_report import build_package_status_report
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -73,6 +74,12 @@ def build_parser() -> argparse.ArgumentParser:
         help="Classify files inside a chat package by package ID",
     )
     classify_package.add_argument("package_id", type=int)
+
+    package_status = subparsers.add_parser(
+        "package-status-report",
+        help="Show report by file statuses for a chat package",
+    )
+    package_status.add_argument("package_id", type=int)
 
     check_copy_map_coverage = subparsers.add_parser(
         "check-copy-map-coverage",
@@ -137,6 +144,8 @@ def main() -> int:
         return cmd_generate_copy_map_draft(args)
     if args.command == "classify-package-files":
         return cmd_classify_package_files(args)
+    if args.command == "package-status-report":
+        return cmd_package_status_report(args)
     if args.command == "check-copy-map-coverage":
         return cmd_check_copy_map_coverage(args)
     if args.command == "recommend-copy-map-additions":
@@ -335,6 +344,38 @@ def cmd_classify_package_files(args) -> int:
         print(f"[{idx}] {item.filename}")
         print(f"  file_type: {item.file_type}")
         print(f"  reason: {item.reason}")
+
+    return 0
+
+
+def cmd_package_status_report(args) -> int:
+    db = _db_from_args(args)
+    package = db.get_chat_package_by_id(args.package_id)
+    if package is None:
+        print("Chat package not found.")
+        return 1
+
+    package_path = package.get("package_path")
+    if not package_path:
+        print("Package path is not set.")
+        return 1
+
+    report = build_package_status_report(package_path)
+
+    print(f"Package status report: {package.get('package_name')}")
+    print(f"  package_path: {package_path}")
+    print(f"  total_files: {report.total_files}")
+    print()
+
+    for status_name, count in report.counts.items():
+        print(f"  {status_name}: {count}")
+    print()
+
+    for status_name in sorted(report.files_by_type.keys()):
+        print(f"{status_name}:")
+        for filename in report.files_by_type[status_name]:
+            print(f"  - {filename}")
+        print()
 
     return 0
 
