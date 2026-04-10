@@ -30,8 +30,8 @@ def classify_file(path: str | Path) -> ClassifiedPackageFile:
     if name == ".wb-copy-map.tsv":
         return ClassifiedPackageFile(name, "copy_map", "special copy map filename")
 
-    if name == ".wb-copy-map.generated.tsv":
-        return ClassifiedPackageFile(name, "copy_map_generated", "generated copy map filename")
+    if name.startswith(".wb-copy-map.") and name.endswith(".tsv"):
+        return ClassifiedPackageFile(name, "copy_map_generated", "derived copy map helper filename")
 
     if name == "chat-card.md":
         return ClassifiedPackageFile(name, "chat_card", "special chat card filename")

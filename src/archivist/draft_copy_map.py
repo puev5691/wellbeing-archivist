@@ -14,6 +14,8 @@ EXCLUDED_FILENAMES = {
     "README-chat-folder.md",
     ".wb-copy-map.tsv",
     ".wb-copy-map.generated.tsv",
+    ".wb-copy-map.candidate.tsv",
+    ".wb-copy-map.append.tsv",
     "chat-card.md",
 }
 
@@ -30,6 +32,9 @@ def should_exclude_file(path: Path) -> bool:
     name = path.name
 
     if name in EXCLUDED_FILENAMES:
+        return True
+
+    if name.startswith(".wb-copy-map.") and name.endswith(".tsv"):
         return True
 
     if path.suffix.lower() in EXCLUDED_SUFFIXES:

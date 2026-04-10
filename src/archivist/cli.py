@@ -5,6 +5,7 @@ from pathlib import Path
 from .classify_files import classify_package_files
 from .config import load_config
 from .copy_map import parse_copy_map
+from .copy_map_append_patch import build_copy_map_append_patch, render_append_patch
 from .copy_map_candidate import build_copy_map_candidate, render_copy_map_candidate
 from .copy_map_coverage import build_copy_map_coverage_report
 from .copy_map_recommendations import build_copy_map_recommendations, render_copy_map_recommendations
@@ -96,6 +97,17 @@ def build_parser() -> argparse.ArgumentParser:
         help="Write merged candidate to .wb-copy-map.candidate.tsv inside the package",
     )
 
+    build_copy_map_append_patch_cmd = subparsers.add_parser(
+        "build-copy-map-append-patch",
+        help="Build append-ready patch from recommendations with non-empty targets",
+    )
+    build_copy_map_append_patch_cmd.add_argument("package_id", type=int)
+    build_copy_map_append_patch_cmd.add_argument(
+        "--write",
+        action="store_true",
+        help="Write append-ready patch to .wb-copy-map.append.tsv inside the package",
+    )
+
     return parser
 
 
@@ -131,6 +143,8 @@ def main() -> int:
         return cmd_recommend_copy_map_additions(args)
     if args.command == "build-copy-map-candidate":
         return cmd_build_copy_map_candidate(args)
+    if args.command == "build-copy-map-append-patch":
+        return cmd_build_copy_map_append_patch(args)
 
     parser.error(f"Unknown command: {args.command}")
     return 2
@@ -456,4 +470,52 @@ def cmd_build_copy_map_candidate(args) -> int:
         print()
 
     print(candidate_text, end="")
+    return 0
+
+
+def cmd_build_copy_map_append_patch(args) -> int:
+    db = _db_from_args(args)
+    package = db.get_chat_package_by_id(args.package_id)
+    if package is None:
+        print("Chat package not found.")
+        return 1
+
+    package_path = package.get("package_path")
+    copy_map_path = package.get("copy_map_file_path")
+
+    if not package_path:
+        print("Package path is not set.")
+        return 1
+
+    if not copy_map_path:
+        print("Copy map is not set for this chat package.")
+        return 1
+
+    report = build_copy_map_append_patch(package_path, copy_map_path)
+    patch_text = render_append_patch(report.append_entries)
+
+    print(f"Copy map append patch for package: {package.get('package_name')}")
+    print(f"  package_path: {package_path}")
+    print(f"  source_copy_map_path: {copy_map_path}")
+    print()
+    print(f"  append_entries: {len(report.append_entries)}")
+    print(f"  skipped_entries: {len(report.skipped_entries)}")
+    print()
+
+    if report.skipped_entries:
+        print("Skipped entries requiring manual decision:")
+        for item in report.skipped_entries:
+            print(f"  - {item.source_filename}")
+            print(f"    file_type: {item.file_type}")
+            print(f"    reason: {item.reason}")
+        print()
+
+    if args.write:
+        output_path = Path(package_path) / ".wb-copy-map.append.tsv"
+        output_path.write_text(patch_text, encoding="utf-8")
+        print(f"Append patch written to: {output_path}")
+        print()
+
+    print("Append-ready lines:")
+    print(patch_text, end="")
     return 0
