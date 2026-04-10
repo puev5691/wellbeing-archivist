@@ -3,9 +3,11 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
+from .classify_files import classify_package_files
 from .config import load_config
 from .copy_map import parse_copy_map
 from .db import Database
+from .draft_copy_map import collect_draft_copy_map_entries, render_draft_copy_map
 from .indexer import Indexer
 from .logging_setup import setup_logging
 
@@ -52,6 +54,23 @@ def build_parser() -> argparse.ArgumentParser:
     )
     show_copy_map.add_argument("package_id", type=int)
 
+    generate_copy_map_draft = subparsers.add_parser(
+        "generate-copy-map-draft",
+        help="Generate draft .wb-copy-map for a chat package by package ID",
+    )
+    generate_copy_map_draft.add_argument("package_id", type=int)
+    generate_copy_map_draft.add_argument(
+        "--write",
+        action="store_true",
+        help="Write draft to .wb-copy-map.generated.tsv inside the package",
+    )
+
+    classify_package = subparsers.add_parser(
+        "classify-package-files",
+        help="Classify files inside a chat package by package ID",
+    )
+    classify_package.add_argument("package_id", type=int)
+
     return parser
 
 
@@ -85,6 +104,12 @@ def main() -> int:
 
     if args.command == "show-copy-map":
         return cmd_show_copy_map(args)
+
+    if args.command == "generate-copy-map-draft":
+        return cmd_generate_copy_map_draft(args)
+
+    if args.command == "classify-package-files":
+        return cmd_classify_package_files(args)
 
     parser.error(f"Unknown command: {args.command}")
     return 2
@@ -224,5 +249,60 @@ def cmd_show_copy_map(args) -> int:
     for idx, entry in enumerate(entries, start=1):
         print(f"[{idx}] {entry.source_filename}")
         print(f"  target_relative_directory: {entry.target_relative_directory}")
+
+    return 0
+
+
+def cmd_generate_copy_map_draft(args) -> int:
+    db = _db_from_args(args)
+    package = db.get_chat_package_by_id(args.package_id)
+    if package is None:
+        print("Chat package not found.")
+        return 1
+
+    package_path = package.get("package_path")
+    if not package_path:
+        print("Package path is not set.")
+        return 1
+
+    entries = collect_draft_copy_map_entries(package_path)
+    draft_text = render_draft_copy_map(entries)
+
+    print(f"Draft copy map for package: {package.get('package_name')}")
+    print(f"  package_path: {package_path}")
+    print()
+
+    if args.write:
+        output_path = Path(package_path) / ".wb-copy-map.generated.tsv"
+        output_path.write_text(draft_text, encoding="utf-8")
+        print(f"Draft written to: {output_path}")
+        print()
+
+    print(draft_text, end="")
+    return 0
+
+
+def cmd_classify_package_files(args) -> int:
+    db = _db_from_args(args)
+    package = db.get_chat_package_by_id(args.package_id)
+    if package is None:
+        print("Chat package not found.")
+        return 1
+
+    package_path = package.get("package_path")
+    if not package_path:
+        print("Package path is not set.")
+        return 1
+
+    classified = classify_package_files(package_path)
+
+    print(f"Package file classification: {package.get('package_name')}")
+    print(f"  package_path: {package_path}")
+    print()
+
+    for idx, item in enumerate(classified, start=1):
+        print(f"[{idx}] {item.filename}")
+        print(f"  file_type: {item.file_type}")
+        print(f"  reason: {item.reason}")
 
     return 0
