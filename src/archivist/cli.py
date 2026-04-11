@@ -33,10 +33,12 @@ from .steps_registry import (
     get_active_step,
     issue_step,
     list_confirmed_steps,
+    list_recent_artifacts,
     list_steps,
     mark_step_executed,
     render_active_step,
     render_confirmed_steps_list,
+    render_recent_artifacts_list,
     render_steps_list,
 )
 
@@ -262,6 +264,14 @@ def build_parser() -> argparse.ArgumentParser:
     list_confirmed_steps_cmd.add_argument("--callsign", help="Entity callsign")
     list_confirmed_steps_cmd.add_argument("--entity-id", dest="entity_id", type=int, help="Entity id")
 
+    list_recent_artifacts_cmd = subparsers.add_parser(
+        "list-recent-artifacts",
+        help="List recent confirmed artifact-like results by entity or for all entities",
+    )
+    list_recent_artifacts_cmd.add_argument("--callsign", help="Entity callsign")
+    list_recent_artifacts_cmd.add_argument("--entity-id", dest="entity_id", type=int, help="Entity id")
+    list_recent_artifacts_cmd.add_argument("--limit", type=int, default=10, help="Maximum number of results")
+
     return parser
 
 
@@ -329,6 +339,8 @@ def main() -> int:
         return cmd_show_entity_summary(args)
     if args.command == "list-confirmed-steps":
         return cmd_list_confirmed_steps(args)
+    if args.command == "list-recent-artifacts":
+        return cmd_list_recent_artifacts(args)
 
     parser.error(f"Unknown command: {args.command}")
     return 2
@@ -503,6 +515,22 @@ def cmd_list_confirmed_steps(args) -> int:
         entity_id=getattr(args, "entity_id", None),
     )
     print(render_confirmed_steps_list(items), end="")
+    return 0
+
+
+def cmd_list_recent_artifacts(args) -> int:
+    db = _db_from_args(args)
+    db.init_schema()
+    ensure_entities_table(db)
+    ensure_steps_table(db)
+
+    items = list_recent_artifacts(
+        db,
+        callsign=getattr(args, "callsign", None),
+        entity_id=getattr(args, "entity_id", None),
+        limit=getattr(args, "limit", 10),
+    )
+    print(render_recent_artifacts_list(items), end="")
     return 0
 
 

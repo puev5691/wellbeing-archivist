@@ -403,3 +403,75 @@ def render_confirmed_steps_list(items: list[dict[str, Any]]) -> str:
         lines.append("")
     return "\n".join(lines).rstrip() + "\n"
 
+def list_recent_artifacts(
+    db: Database,
+    *,
+    callsign: str | None = None,
+    entity_id: int | None = None,
+    limit: int = 10,
+) -> list[dict[str, Any]]:
+    where_clauses: list[str] = ["s.state = ?"]
+    params: list[Any] = [STEP_STATE_CONFIRMED]
+
+    if callsign is not None:
+        where_clauses.append("e.callsign = ?")
+        params.append(callsign)
+    if entity_id is not None:
+        where_clauses.append("s.entity_id = ?")
+        params.append(entity_id)
+
+    where_sql = "WHERE " + " AND ".join(where_clauses)
+
+    sql = f"""
+        SELECT
+            s.id,
+            s.entity_id,
+            e.callsign,
+            s.title,
+            s.phase,
+            s.operation_type,
+            s.target_path,
+            s.state,
+            s.confirmed_at,
+            s.success_evidence,
+            s.notes
+        FROM steps s
+        JOIN entities e ON e.id = s.entity_id
+        {where_sql}
+        ORDER BY
+            CASE WHEN s.confirmed_at IS NULL THEN 1 ELSE 0 END,
+            s.confirmed_at DESC,
+            s.id DESC
+        LIMIT ?
+    """
+
+    with db.connect() as conn:
+        rows = conn.execute(sql, tuple(params + [limit])).fetchall()
+    return [dict(row) for row in rows]
+
+
+def render_recent_artifacts_list(items: list[dict[str, Any]]) -> str:
+    lines: list[str] = []
+    lines.append("Recent artifacts")
+    lines.append(f"  total: {len(items)}")
+    lines.append("")
+
+    if not items:
+        lines.append("No recent artifacts found.")
+        return "\n".join(lines) + "\n"
+
+    for item in items:
+        lines.append(f"[{item['id']}] {item['callsign']}")
+        lines.append(f"  title: {item['title']}")
+        lines.append(f"  phase: {item['phase']}")
+        lines.append(f"  operation_type: {item['operation_type']}")
+        lines.append(f"  target_path: {item['target_path']}")
+        lines.append(f"  confirmed_at: {item.get('confirmed_at') or ''}")
+        if item.get("success_evidence"):
+            lines.append(f"  success_evidence: {item['success_evidence']}")
+        if item.get("notes"):
+            lines.append(f"  notes: {item['notes']}")
+        lines.append("")
+
+    return "\n".join(lines).rstrip() + "\n"
+
