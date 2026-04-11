@@ -475,3 +475,50 @@ def render_recent_artifacts_list(items: list[dict[str, Any]]) -> str:
 
     return "\n".join(lines).rstrip() + "\n"
 
+def get_last_confirmed_step(
+    db: Database,
+    *,
+    callsign: str | None = None,
+    entity_id: int | None = None,
+) -> dict[str, Any] | None:
+    where_clauses: list[str] = ["s.state = ?"]
+    params: list[Any] = [STEP_STATE_CONFIRMED]
+
+    if callsign is not None:
+        where_clauses.append("e.callsign = ?")
+        params.append(callsign)
+    if entity_id is not None:
+        where_clauses.append("s.entity_id = ?")
+        params.append(entity_id)
+
+    where_sql = "WHERE " + " AND ".join(where_clauses)
+
+    sql = f"""
+        SELECT
+            s.id,
+            s.entity_id,
+            e.callsign,
+            s.title,
+            s.phase,
+            s.operation_type,
+            s.target_path,
+            s.state,
+            s.issued_at,
+            s.executed_at,
+            s.confirmed_at,
+            s.success_evidence,
+            s.notes
+        FROM steps s
+        JOIN entities e ON e.id = s.entity_id
+        {where_sql}
+        ORDER BY
+            CASE WHEN s.confirmed_at IS NULL THEN 1 ELSE 0 END,
+            s.confirmed_at DESC,
+            s.id DESC
+        LIMIT 1
+    """
+
+    with db.connect() as conn:
+        row = conn.execute(sql, tuple(params)).fetchone()
+    return None if row is None else dict(row)
+

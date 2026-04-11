@@ -31,6 +31,7 @@ from .steps_registry import (
     confirm_step_artifact,
     ensure_steps_table,
     get_active_step,
+    get_last_confirmed_step,
     issue_step,
     list_confirmed_steps,
     list_recent_artifacts,
@@ -499,7 +500,18 @@ def cmd_show_entity_summary(args) -> int:
         db,
         entity_id=int(entity["id"]),
     )
-    print(render_entity_summary(entity, active_step=active_step), end="")
+    last_confirmed_step = get_last_confirmed_step(
+        db,
+        entity_id=int(entity["id"]),
+    )
+    print(
+        render_entity_summary(
+            entity,
+            active_step=active_step,
+            last_confirmed_step=last_confirmed_step,
+        ),
+        end="",
+    )
     return 0
 
 

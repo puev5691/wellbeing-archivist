@@ -196,6 +196,7 @@ def render_entity_summary(
     entity: dict[str, Any] | None,
     *,
     active_step: dict[str, Any] | None = None,
+    last_confirmed_step: dict[str, Any] | None = None,
 ) -> str:
     lines: list[str] = []
     lines.append("Entity summary")
@@ -204,31 +205,52 @@ def render_entity_summary(
         lines.append("  state: entity not found")
         return "\n".join(lines) + "\n"
 
-    lines.append(f"  id: {entity.get('id')}")
-    lines.append(f"  callsign: {entity.get('callsign') or ''}")
-    lines.append(f"  contour: {entity.get('contour') or ''}")
-    lines.append(f"  role: {entity.get('role') or ''}")
-    lines.append(f"  package_path: {entity.get('package_path') or ''}")
-    lines.append(f"  status: {entity.get('status') or ''}")
-    lines.append(f"  current_phase: {entity.get('current_phase') or ''}")
-    lines.append(f"  current_step_title: {entity.get('current_step_title') or ''}")
-    lines.append(f"  next_allowed_action: {entity.get('next_allowed_action') or ''}")
+    if active_step is not None:
+        operational_state_text = "active step present"
+    elif last_confirmed_step is not None:
+        operational_state_text = "idle with confirmed history"
+    else:
+        operational_state_text = "no active step"
 
+    lines.append("  registration:")
+    lines.append(f"    id: {entity.get('id')}")
+    lines.append(f"    callsign: {entity.get('callsign') or ''}")
+    lines.append(f"    contour: {entity.get('contour') or ''}")
+    lines.append(f"    role: {entity.get('role') or ''}")
+    lines.append(f"    package_path: {entity.get('package_path') or ''}")
+    lines.append(f"    status: {entity.get('status') or ''}")
+    lines.append(f"    current_phase: {entity.get('current_phase') or ''}")
+    lines.append(f"    current_step_title: {entity.get('current_step_title') or ''}")
+    lines.append(f"    next_allowed_action: {entity.get('next_allowed_action') or ''}")
     if entity.get("notes"):
-        lines.append(f"  notes: {entity['notes']}")
+        lines.append(f"    notes: {entity['notes']}")
+    lines.append(f"    created_at: {entity.get('created_at') or ''}")
+    lines.append(f"    updated_at: {entity.get('updated_at') or ''}")
+
+    lines.append("  operational:")
+    lines.append(f"    operational_state_text: {operational_state_text}")
 
     if active_step is None:
-        lines.append("  active_step: none")
+        lines.append("    active_step: none")
     else:
-        lines.append("  active_step:")
-        lines.append(f"    id: {active_step.get('id')}")
-        lines.append(f"    title: {active_step.get('title') or ''}")
-        lines.append(f"    phase: {active_step.get('phase') or ''}")
-        lines.append(f"    operation_type: {active_step.get('operation_type') or ''}")
-        lines.append(f"    target_path: {active_step.get('target_path') or ''}")
-        lines.append(f"    state: {active_step.get('state') or ''}")
+        lines.append("    active_step:")
+        lines.append(f"      id: {active_step.get('id')}")
+        lines.append(f"      title: {active_step.get('title') or ''}")
+        lines.append(f"      phase: {active_step.get('phase') or ''}")
+        lines.append(f"      operation_type: {active_step.get('operation_type') or ''}")
+        lines.append(f"      target_path: {active_step.get('target_path') or ''}")
+        lines.append(f"      state: {active_step.get('state') or ''}")
 
-    lines.append(f"  created_at: {entity.get('created_at') or ''}")
-    lines.append(f"  updated_at: {entity.get('updated_at') or ''}")
+    if last_confirmed_step is None:
+        lines.append("    last_confirmed_step: none")
+    else:
+        lines.append("    last_confirmed_step:")
+        lines.append(f"      id: {last_confirmed_step.get('id')}")
+        lines.append(f"      title: {last_confirmed_step.get('title') or ''}")
+        lines.append(f"      phase: {last_confirmed_step.get('phase') or ''}")
+        lines.append(f"      operation_type: {last_confirmed_step.get('operation_type') or ''}")
+        lines.append(f"      target_path: {last_confirmed_step.get('target_path') or ''}")
+        lines.append(f"      confirmed_at: {last_confirmed_step.get('confirmed_at') or ''}")
+
     return "\n".join(lines) + "\n"
 
