@@ -586,21 +586,36 @@ def cmd_service_query(args) -> int:
         return 1
 
     entity_id = int(entity["id"])
+    active_step = get_active_step(db, entity_id=entity_id)
+    last_confirmed_step = get_last_confirmed_step(db, entity_id=entity_id)
+
+    if active_step is not None:
+        operational_state_text = "active step present"
+    elif last_confirmed_step is not None:
+        operational_state_text = "idle with confirmed history"
+    else:
+        operational_state_text = "no active step"
 
     if args.query_type == "active-step":
-        data = get_active_step(db, entity_id=entity_id)
+        data = {
+            "active_step": active_step,
+        }
     elif args.query_type == "entity-summary":
         data = {
-            "entity": entity,
-            "active_step": get_active_step(db, entity_id=entity_id),
-            "last_confirmed_step": get_last_confirmed_step(db, entity_id=entity_id),
+            "active_step": active_step,
+            "last_confirmed_step": last_confirmed_step,
+            "operational_state_text": operational_state_text,
         }
     elif args.query_type == "recent-artifacts":
-        data = list_recent_artifacts(
+        items = list_recent_artifacts(
             db,
             entity_id=entity_id,
             limit=getattr(args, "limit", 10),
         )
+        data = {
+            "items": items,
+            "count": len(items),
+        }
     else:
         payload = {
             "ok": False,
