@@ -1,5 +1,6 @@
 from __future__ import annotations
 import argparse
+import json
 from pathlib import Path
 
 from .classify_files import classify_package_files
@@ -273,6 +274,20 @@ def build_parser() -> argparse.ArgumentParser:
     list_recent_artifacts_cmd.add_argument("--entity-id", dest="entity_id", type=int, help="Entity id")
     list_recent_artifacts_cmd.add_argument("--limit", type=int, default=10, help="Maximum number of results")
 
+    service_query_cmd = subparsers.add_parser(
+        "service-query",
+        help="Return machine-readable JSON for selected archivist query type",
+    )
+    service_query_cmd.add_argument(
+        "query_type",
+        choices=["active-step", "entity-summary", "recent-artifacts"],
+        help="Type of structured query",
+    )
+    service_query_group = service_query_cmd.add_mutually_exclusive_group(required=True)
+    service_query_group.add_argument("--callsign", help="Entity callsign")
+    service_query_group.add_argument("--entity-id", dest="entity_id", type=int, help="Entity id")
+    service_query_cmd.add_argument("--limit", type=int, default=10, help="Maximum number of results for list-style queries")
+
     return parser
 
 
@@ -342,6 +357,8 @@ def main() -> int:
         return cmd_list_confirmed_steps(args)
     if args.command == "list-recent-artifacts":
         return cmd_list_recent_artifacts(args)
+    if args.command == "service-query":
+        return cmd_service_query(args)
 
     parser.error(f"Unknown command: {args.command}")
     return 2
@@ -543,6 +560,71 @@ def cmd_list_recent_artifacts(args) -> int:
         limit=getattr(args, "limit", 10),
     )
     print(render_recent_artifacts_list(items), end="")
+    return 0
+
+
+def cmd_service_query(args) -> int:
+    db = _db_from_args(args)
+    db.init_schema()
+    ensure_entities_table(db)
+    ensure_steps_table(db)
+
+    entity = get_entity_state(
+        db,
+        entity_id=getattr(args, "entity_id", None),
+        callsign=getattr(args, "callsign", None),
+    )
+    if entity is None:
+        payload = {
+            "ok": False,
+            "query_type": args.query_type,
+            "error": "entity_not_found",
+            "callsign": getattr(args, "callsign", None),
+            "entity_id": getattr(args, "entity_id", None),
+        }
+        print(json.dumps(payload, ensure_ascii=False, indent=2))
+        return 1
+
+    entity_id = int(entity["id"])
+
+    if args.query_type == "active-step":
+        data = get_active_step(db, entity_id=entity_id)
+    elif args.query_type == "entity-summary":
+        data = {
+            "entity": entity,
+            "active_step": get_active_step(db, entity_id=entity_id),
+            "last_confirmed_step": get_last_confirmed_step(db, entity_id=entity_id),
+        }
+    elif args.query_type == "recent-artifacts":
+        data = list_recent_artifacts(
+            db,
+            entity_id=entity_id,
+            limit=getattr(args, "limit", 10),
+        )
+    else:
+        payload = {
+            "ok": False,
+            "query_type": args.query_type,
+            "error": "unsupported_query_type",
+        }
+        print(json.dumps(payload, ensure_ascii=False, indent=2))
+        return 2
+
+    payload = {
+        "ok": True,
+        "query_type": args.query_type,
+        "entity": {
+            "id": entity.get("id"),
+            "callsign": entity.get("callsign"),
+            "contour": entity.get("contour"),
+            "role": entity.get("role"),
+            "status": entity.get("status"),
+            "current_phase": entity.get("current_phase"),
+            "package_path": entity.get("package_path"),
+        },
+        "data": data,
+    }
+    print(json.dumps(payload, ensure_ascii=False, indent=2))
     return 0
 
 
