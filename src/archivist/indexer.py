@@ -33,7 +33,11 @@ class Indexer:
                 if not root.exists() or not root.is_dir():
                     continue
 
-                for path in iter_files([str(root)], self.config.exclude_dirs):
+                for path in iter_files(
+                    [str(root)],
+                    self.config.exclude_dirs,
+                    self.config.exclude_paths,
+                ):
                     files_seen += 1
                     try:
                         self._index_single_file(path, project_root=root)
@@ -43,8 +47,8 @@ class Indexer:
                         self._log(f"Failed to index file {path}: {format_error(exc)}")
 
             chat_packages_found = self._collect_chat_packages()
-
             finished_at = now_iso()
+
             self.db.finish_index_run(
                 run_id=run_id,
                 finished_at=finished_at,
@@ -64,6 +68,7 @@ class Indexer:
                 "chat_packages_found": chat_packages_found,
                 "status": INDEX_RUN_STATUS_COMPLETED,
             }
+
         except Exception as exc:
             finished_at = now_iso()
             self.db.finish_index_run(
@@ -102,7 +107,6 @@ class Indexer:
         record.text_excerpt = excerpt
         record.scan_state = scan_state
         record.error_note = error_note
-
         return record
 
     def _collect_chat_packages(self) -> int:

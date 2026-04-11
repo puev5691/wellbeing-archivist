@@ -4,6 +4,7 @@ from pathlib import Path
 
 from .classify_files import classify_package_files
 from .config import load_config
+from .context_manifest import build_context_manifest, render_context_manifest
 from .copy_map import parse_copy_map
 from .copy_map_append_patch import build_copy_map_append_patch, render_append_patch
 from .copy_map_candidate import build_copy_map_candidate, render_copy_map_candidate
@@ -14,6 +15,25 @@ from .draft_copy_map import collect_draft_copy_map_entries, render_draft_copy_ma
 from .indexer import Indexer
 from .logging_setup import setup_logging
 from .package_status_report import build_package_status_report
+from .repo_manifest import build_repo_manifest, render_repo_manifest, default_repo_manifest_output_path
+from .repo_profile import build_repo_profile, render_repo_profile, default_repo_profile_output_path
+from .repo_start_context import build_repo_start_context, render_repo_start_context, default_repo_start_context_output_path
+from .entities_registry import (
+    ensure_entities_table,
+    get_entity_state,
+    list_entities,
+    register_entity,
+    render_entities_list,
+    render_entity_state,
+)
+from .steps_registry import (
+    confirm_step_artifact,
+    ensure_steps_table,
+    issue_step,
+    list_steps,
+    mark_step_executed,
+    render_steps_list,
+)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -81,6 +101,45 @@ def build_parser() -> argparse.ArgumentParser:
     )
     package_status.add_argument("package_id", type=int)
 
+    build_context_manifest_cmd = subparsers.add_parser(
+        "build-context-manifest",
+        help="Build context manifest for a new entity or handoff",
+    )
+    build_context_manifest_cmd.add_argument("package_id", type=int)
+
+    build_repo_manifest_cmd = subparsers.add_parser(
+        "build-repo-manifest",
+        help="Build repository manifest for code-oriented entity",
+    )
+    build_repo_manifest_cmd.add_argument("repo_path", help="Path to repository directory")
+    build_repo_manifest_cmd.add_argument(
+        "--write",
+        action="store_true",
+        help="Write repository manifest into _ARCHIVIST/repo_manifests",
+    )
+
+    build_repo_profile_cmd = subparsers.add_parser(
+        "build-repo-profile",
+        help="Build repository profile for code-oriented entity",
+    )
+    build_repo_profile_cmd.add_argument("repo_path", help="Path to repository directory")
+    build_repo_profile_cmd.add_argument(
+        "--write",
+        action="store_true",
+        help="Write repository profile into _ARCHIVIST/repo_reports",
+    )
+
+    build_repo_start_context_cmd = subparsers.add_parser(
+        "build-repo-start-context",
+        help="Build startup reading context for code-oriented entity",
+    )
+    build_repo_start_context_cmd.add_argument("repo_path", help="Path to repository directory")
+    build_repo_start_context_cmd.add_argument(
+        "--write",
+        action="store_true",
+        help="Write startup context into _ARCHIVIST/repo_reports",
+    )
+
     check_copy_map_coverage = subparsers.add_parser(
         "check-copy-map-coverage",
         help="Check how well .wb-copy-map.tsv covers the files of a chat package",
@@ -109,10 +168,70 @@ def build_parser() -> argparse.ArgumentParser:
         help="Build append-ready patch from recommendations with non-empty targets",
     )
     build_copy_map_append_patch_cmd.add_argument("package_id", type=int)
-    build_copy_map_append_patch_cmd.add_argument(
-        "--write",
+    register_entity_cmd = subparsers.add_parser(
+        "register-entity",
+        help="Register or update entity in the entities registry",
+    )
+    register_entity_cmd.add_argument("callsign", help="Entity callsign")
+    register_entity_cmd.add_argument("--contour", required=True, help="Entity contour")
+    register_entity_cmd.add_argument("--role", required=True, help="Entity role")
+    register_entity_cmd.add_argument("--package-path", required=True, help="Entity package path")
+    register_entity_cmd.add_argument("--status", default="active", help="Entity status")
+    register_entity_cmd.add_argument("--current-phase", default="bootstrap", help="Current phase")
+    register_entity_cmd.add_argument("--current-step-title", default="", help="Current step title")
+    register_entity_cmd.add_argument("--next-allowed-action", default="", help="Next allowed action")
+    register_entity_cmd.add_argument("--notes", default="", help="Entity notes")
+
+    subparsers.add_parser("list-entities", help="List registered entities")
+
+    show_entity_state_cmd = subparsers.add_parser(
+        "show-entity-state",
+        help="Show entity state by callsign or id",
+    )
+    show_group = show_entity_state_cmd.add_mutually_exclusive_group(required=True)
+    show_group.add_argument("--callsign", help="Entity callsign")
+    show_group.add_argument("--id", dest="entity_id", type=int, help="Entity id")
+
+    issue_step_cmd = subparsers.add_parser(
+        "issue-step",
+        help="Create step in the steps registry with state script_issued",
+    )
+    issue_step_cmd.add_argument("--callsign", required=True, help="Entity callsign")
+    issue_step_cmd.add_argument("--title", required=True, help="Step title")
+    issue_step_cmd.add_argument("--phase", required=True, help="Step phase")
+    issue_step_cmd.add_argument("--operation-type", required=True, help="Operation type")
+    issue_step_cmd.add_argument("--target-path", required=True, help="Target file path")
+    issue_step_cmd.add_argument("--notes", default="", help="Step notes")
+
+    mark_step_executed_cmd = subparsers.add_parser(
+        "mark-step-executed",
+        help="Mark step as script_executed",
+    )
+    mark_step_executed_cmd.add_argument("step_id", type=int, help="Step id")
+    mark_step_executed_cmd.add_argument("--notes", default="", help="Execution notes")
+
+    confirm_step_artifact_cmd = subparsers.add_parser(
+        "confirm-step-artifact",
+        help="Mark step as artifact_confirmed",
+    )
+    confirm_step_artifact_cmd.add_argument("step_id", type=int, help="Step id")
+    confirm_step_artifact_cmd.add_argument(
+        "--success-evidence",
+        required=True,
+        help="Evidence string proving artifact confirmation",
+    )
+    confirm_step_artifact_cmd.add_argument("--notes", default="", help="Confirmation notes")
+
+    list_steps_cmd = subparsers.add_parser(
+        "list-steps",
+        help="List steps, optionally filtered by entity",
+    )
+    list_steps_cmd.add_argument("--callsign", help="Entity callsign")
+    list_steps_cmd.add_argument("--entity-id", type=int, help="Entity id")
+    list_steps_cmd.add_argument(
+        "--only-active",
         action="store_true",
-        help="Write append-ready patch to .wb-copy-map.append.tsv inside the package",
+        help="Show only steps not yet in artifact_confirmed state",
     )
 
     return parser
@@ -146,6 +265,14 @@ def main() -> int:
         return cmd_classify_package_files(args)
     if args.command == "package-status-report":
         return cmd_package_status_report(args)
+    if args.command == "build-context-manifest":
+        return cmd_build_context_manifest(args)
+    if args.command == "build-repo-manifest":
+        return cmd_build_repo_manifest(args)
+    if args.command == "build-repo-profile":
+        return cmd_build_repo_profile(args)
+    if args.command == "build-repo-start-context":
+        return cmd_build_repo_start_context(args)
     if args.command == "check-copy-map-coverage":
         return cmd_check_copy_map_coverage(args)
     if args.command == "recommend-copy-map-additions":
@@ -154,9 +281,127 @@ def main() -> int:
         return cmd_build_copy_map_candidate(args)
     if args.command == "build-copy-map-append-patch":
         return cmd_build_copy_map_append_patch(args)
+    if args.command == "register-entity":
+        return cmd_register_entity(args)
+    if args.command == "list-entities":
+        return cmd_list_entities(args)
+    if args.command == "show-entity-state":
+        return cmd_show_entity_state(args)
+    if args.command == "issue-step":
+        return cmd_issue_step(args)
+    if args.command == "mark-step-executed":
+        return cmd_mark_step_executed(args)
+    if args.command == "confirm-step-artifact":
+        return cmd_confirm_step_artifact(args)
+    if args.command == "list-steps":
+        return cmd_list_steps(args)
 
     parser.error(f"Unknown command: {args.command}")
     return 2
+
+
+
+def cmd_register_entity(args) -> int:
+    db = _db_from_args(args)
+    db.init_schema()
+    ensure_entities_table(db)
+    entity_id = register_entity(
+        db,
+        callsign=args.callsign,
+        contour=args.contour,
+        role=args.role,
+        package_path=args.package_path,
+        status=args.status,
+        current_phase=args.current_phase,
+        current_step_title=args.current_step_title,
+        next_allowed_action=args.next_allowed_action,
+        notes=args.notes,
+    )
+    print(f"Entity registered: {args.callsign} (id={entity_id})")
+    return 0
+
+
+def cmd_list_entities(args) -> int:
+    db = _db_from_args(args)
+    db.init_schema()
+    ensure_entities_table(db)
+    items = list_entities(db)
+    print(render_entities_list(items), end="")
+    return 0
+
+
+def cmd_show_entity_state(args) -> int:
+    db = _db_from_args(args)
+    db.init_schema()
+    ensure_entities_table(db)
+    item = get_entity_state(
+        db,
+        entity_id=getattr(args, "entity_id", None),
+        callsign=getattr(args, "callsign", None),
+    )
+    if item is None:
+        print("Entity not found.")
+        return 1
+    print(render_entity_state(item), end="")
+    return 0
+
+
+def cmd_issue_step(args) -> int:
+    db = _db_from_args(args)
+    db.init_schema()
+    ensure_entities_table(db)
+    ensure_steps_table(db)
+    step_id = issue_step(
+        db,
+        callsign=args.callsign,
+        title=args.title,
+        phase=args.phase,
+        operation_type=args.operation_type,
+        target_path=args.target_path,
+        notes=args.notes,
+    )
+    print(f"Step issued: id={step_id}")
+    return 0
+
+
+def cmd_mark_step_executed(args) -> int:
+    db = _db_from_args(args)
+    db.init_schema()
+    ensure_entities_table(db)
+    ensure_steps_table(db)
+    mark_step_executed(db, step_id=args.step_id, notes=args.notes)
+    print(f"Step marked as executed: id={args.step_id}")
+    return 0
+
+
+def cmd_confirm_step_artifact(args) -> int:
+    db = _db_from_args(args)
+    db.init_schema()
+    ensure_entities_table(db)
+    ensure_steps_table(db)
+    confirm_step_artifact(
+        db,
+        step_id=args.step_id,
+        success_evidence=args.success_evidence,
+        notes=args.notes,
+    )
+    print(f"Step confirmed: id={args.step_id}")
+    return 0
+
+
+def cmd_list_steps(args) -> int:
+    db = _db_from_args(args)
+    db.init_schema()
+    ensure_entities_table(db)
+    ensure_steps_table(db)
+    items = list_steps(
+        db,
+        callsign=args.callsign,
+        entity_id=args.entity_id,
+        only_active=args.only_active,
+    )
+    print(render_steps_list(items), end="")
+    return 0
 
 
 def _db_from_args(args) -> Database:
@@ -377,6 +622,71 @@ def cmd_package_status_report(args) -> int:
             print(f"  - {filename}")
         print()
 
+    return 0
+
+
+def cmd_build_context_manifest(args) -> int:
+    db = _db_from_args(args)
+    package = db.get_chat_package_by_id(args.package_id)
+    if package is None:
+        print("Chat package not found.")
+        return 1
+
+    package_path = package.get("package_path")
+    package_name = package.get("package_name")
+
+    if not package_path:
+        print("Package path is not set.")
+        return 1
+
+    manifest = build_context_manifest(package_path)
+    text = render_context_manifest(manifest, package_name or "unknown-package")
+    print(text, end="")
+    return 0
+
+
+def cmd_build_repo_manifest(args) -> int:
+    manifest = build_repo_manifest(args.repo_path)
+    text = render_repo_manifest(manifest)
+
+    if args.write:
+        output_path = Path(default_repo_manifest_output_path(args.repo_path))
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_text(text, encoding="utf-8")
+        print(f"Repository manifest written to: {output_path}")
+        print()
+
+    print(text, end="")
+    return 0
+
+
+def cmd_build_repo_profile(args) -> int:
+    profile = build_repo_profile(args.repo_path)
+    text = render_repo_profile(profile)
+
+    if args.write:
+        output_path = Path(default_repo_profile_output_path(args.repo_path))
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_text(text, encoding="utf-8")
+        print(f"Repository profile written to: {output_path}")
+        print()
+
+    print(text, end="")
+    return 0
+
+
+def cmd_build_repo_start_context(args) -> int:
+    context = build_repo_start_context(args.repo_path)
+    text = render_repo_start_context(context)
+
+    if args.write:
+        output_path = Path(default_repo_start_context_output_path(args.repo_path))
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_text(text, encoding="utf-8")
+        print(f"Repository start context written to: {output_path}")
+        print()
+
+    print(text, end="")
     return 0
 
 

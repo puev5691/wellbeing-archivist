@@ -16,8 +16,15 @@ from .models import FileRecord
 from .utils import lower_extension, now_iso, safe_relative_path
 
 
-def iter_files(roots: list[str], exclude_dirs: list[str]) -> Iterator[Path]:
-    excluded = set(exclude_dirs)
+def iter_files(
+    roots: list[str],
+    exclude_dirs: list[str],
+    exclude_paths: list[str] | None = None,
+) -> Iterator[Path]:
+    excluded_dir_names = set(exclude_dirs)
+    excluded_path_prefixes = [
+        str(Path(p).expanduser().resolve()) for p in (exclude_paths or [])
+    ]
 
     for root_str in roots:
         root = Path(root_str).expanduser().resolve()
@@ -27,15 +34,26 @@ def iter_files(roots: list[str], exclude_dirs: list[str]) -> Iterator[Path]:
         for path in root.rglob("*"):
             if not path.is_file():
                 continue
-
-            if should_skip_path(path, excluded):
+            if should_skip_path(path, excluded_dir_names, excluded_path_prefixes):
                 continue
-
             yield path
 
 
-def should_skip_path(path: Path, exclude_dirs: set[str]) -> bool:
-    return any(part in exclude_dirs for part in path.parts)
+def should_skip_path(
+    path: Path,
+    exclude_dirs: set[str],
+    exclude_paths: list[str],
+) -> bool:
+    resolved = str(path.resolve())
+
+    if any(part in exclude_dirs for part in path.parts):
+        return True
+
+    for prefix in exclude_paths:
+        if resolved == prefix or resolved.startswith(prefix + "/"):
+            return True
+
+    return False
 
 
 def detect_project_contour(path: Path) -> str | None:
