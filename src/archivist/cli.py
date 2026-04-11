@@ -19,6 +19,7 @@ from .package_status_report import build_package_status_report
 from .repo_manifest import build_repo_manifest, render_repo_manifest, default_repo_manifest_output_path
 from .repo_profile import build_repo_profile, render_repo_profile, default_repo_profile_output_path
 from .repo_start_context import build_repo_start_context, render_repo_start_context, default_repo_start_context_output_path
+from .service_layer import build_service_query_payload
 from .entities_registry import (
     ensure_entities_table,
     get_entity_state,
@@ -565,82 +566,15 @@ def cmd_list_recent_artifacts(args) -> int:
 
 def cmd_service_query(args) -> int:
     db = _db_from_args(args)
-    db.init_schema()
-    ensure_entities_table(db)
-    ensure_steps_table(db)
-
-    entity = get_entity_state(
+    payload, exit_code = build_service_query_payload(
         db,
-        entity_id=getattr(args, "entity_id", None),
+        query_type=args.query_type,
         callsign=getattr(args, "callsign", None),
+        entity_id=getattr(args, "entity_id", None),
+        limit=getattr(args, "limit", 10),
     )
-    if entity is None:
-        payload = {
-            "ok": False,
-            "query_type": args.query_type,
-            "error": "entity_not_found",
-            "callsign": getattr(args, "callsign", None),
-            "entity_id": getattr(args, "entity_id", None),
-        }
-        print(json.dumps(payload, ensure_ascii=False, indent=2))
-        return 1
-
-    entity_id = int(entity["id"])
-    active_step = get_active_step(db, entity_id=entity_id)
-    last_confirmed_step = get_last_confirmed_step(db, entity_id=entity_id)
-
-    if active_step is not None:
-        operational_state_text = "active step present"
-    elif last_confirmed_step is not None:
-        operational_state_text = "idle with confirmed history"
-    else:
-        operational_state_text = "no active step"
-
-    if args.query_type == "active-step":
-        data = {
-            "active_step": active_step,
-        }
-    elif args.query_type == "entity-summary":
-        data = {
-            "active_step": active_step,
-            "last_confirmed_step": last_confirmed_step,
-            "operational_state_text": operational_state_text,
-        }
-    elif args.query_type == "recent-artifacts":
-        items = list_recent_artifacts(
-            db,
-            entity_id=entity_id,
-            limit=getattr(args, "limit", 10),
-        )
-        data = {
-            "items": items,
-            "count": len(items),
-        }
-    else:
-        payload = {
-            "ok": False,
-            "query_type": args.query_type,
-            "error": "unsupported_query_type",
-        }
-        print(json.dumps(payload, ensure_ascii=False, indent=2))
-        return 2
-
-    payload = {
-        "ok": True,
-        "query_type": args.query_type,
-        "entity": {
-            "id": entity.get("id"),
-            "callsign": entity.get("callsign"),
-            "contour": entity.get("contour"),
-            "role": entity.get("role"),
-            "status": entity.get("status"),
-            "current_phase": entity.get("current_phase"),
-            "package_path": entity.get("package_path"),
-        },
-        "data": data,
-    }
     print(json.dumps(payload, ensure_ascii=False, indent=2))
-    return 0
+    return exit_code
 
 
 def _db_from_args(args) -> Database:
