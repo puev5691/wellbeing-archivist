@@ -25,13 +25,18 @@ from .entities_registry import (
     register_entity,
     render_entities_list,
     render_entity_state,
+    render_entity_summary,
 )
 from .steps_registry import (
     confirm_step_artifact,
     ensure_steps_table,
+    get_active_step,
     issue_step,
+    list_confirmed_steps,
     list_steps,
     mark_step_executed,
+    render_active_step,
+    render_confirmed_steps_list,
     render_steps_list,
 )
 
@@ -234,6 +239,29 @@ def build_parser() -> argparse.ArgumentParser:
         help="Show only steps not yet in artifact_confirmed state",
     )
 
+    show_active_step_cmd = subparsers.add_parser(
+        "show-active-step",
+        help="Show active step by callsign or entity id",
+    )
+    show_active_group = show_active_step_cmd.add_mutually_exclusive_group(required=True)
+    show_active_group.add_argument("--callsign", help="Entity callsign")
+    show_active_group.add_argument("--entity-id", dest="entity_id", type=int, help="Entity id")
+
+    show_entity_summary_cmd = subparsers.add_parser(
+        "show-entity-summary",
+        help="Show compact entity summary with active step information",
+    )
+    show_entity_summary_group = show_entity_summary_cmd.add_mutually_exclusive_group(required=True)
+    show_entity_summary_group.add_argument("--callsign", help="Entity callsign")
+    show_entity_summary_group.add_argument("--entity-id", dest="entity_id", type=int, help="Entity id")
+
+    list_confirmed_steps_cmd = subparsers.add_parser(
+        "list-confirmed-steps",
+        help="List confirmed steps by entity or for all entities",
+    )
+    list_confirmed_steps_cmd.add_argument("--callsign", help="Entity callsign")
+    list_confirmed_steps_cmd.add_argument("--entity-id", dest="entity_id", type=int, help="Entity id")
+
     return parser
 
 
@@ -295,6 +323,12 @@ def main() -> int:
         return cmd_confirm_step_artifact(args)
     if args.command == "list-steps":
         return cmd_list_steps(args)
+    if args.command == "show-active-step":
+        return cmd_show_active_step(args)
+    if args.command == "show-entity-summary":
+        return cmd_show_entity_summary(args)
+    if args.command == "list-confirmed-steps":
+        return cmd_list_confirmed_steps(args)
 
     parser.error(f"Unknown command: {args.command}")
     return 2
@@ -401,6 +435,74 @@ def cmd_list_steps(args) -> int:
         only_active=args.only_active,
     )
     print(render_steps_list(items), end="")
+    return 0
+
+
+def cmd_show_active_step(args) -> int:
+    db = _db_from_args(args)
+    db.init_schema()
+    ensure_entities_table(db)
+    ensure_steps_table(db)
+
+    entity = get_entity_state(
+        db,
+        entity_id=getattr(args, "entity_id", None),
+        callsign=getattr(args, "callsign", None),
+    )
+    if entity is None:
+        print("Entity not found.")
+        return 1
+
+    item = get_active_step(
+        db,
+        entity_id=int(entity["id"]),
+    )
+    print(
+        render_active_step(
+            item,
+            callsign=entity.get("callsign"),
+            entity_id=entity.get("id"),
+        ),
+        end="",
+    )
+    return 0
+
+
+def cmd_show_entity_summary(args) -> int:
+    db = _db_from_args(args)
+    db.init_schema()
+    ensure_entities_table(db)
+    ensure_steps_table(db)
+
+    entity = get_entity_state(
+        db,
+        entity_id=getattr(args, "entity_id", None),
+        callsign=getattr(args, "callsign", None),
+    )
+    if entity is None:
+        print("Entity not found.")
+        return 1
+
+    active_step = get_active_step(
+        db,
+        entity_id=int(entity["id"]),
+    )
+    print(render_entity_summary(entity, active_step=active_step), end="")
+    return 0
+
+
+def cmd_list_confirmed_steps(args) -> int:
+    db = _db_from_args(args)
+    db.init_schema()
+    ensure_entities_table(db)
+    ensure_steps_table(db)
+
+    items = list_confirmed_steps(
+        db,
+        callsign=getattr(args, "callsign", None),
+        entity_id=getattr(args, "entity_id", None),
+    )
+    print(render_confirmed_steps_list(items), end="")
     return 0
 
 

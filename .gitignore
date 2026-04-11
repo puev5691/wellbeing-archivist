@@ -10,6 +10,7 @@
 .wb-backups-cycle1-entities-repair/
 .wb-backups-cycle1-entities/
 .wb-backups-cycle2-steps/
+.wb-backups-query-layer/
 .wb-backups-readme/
 __pycache__/
 config/data/*.db

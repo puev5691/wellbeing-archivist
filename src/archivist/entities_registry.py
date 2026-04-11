@@ -191,3 +191,44 @@ def render_entity_state(item: dict[str, Any]) -> str:
     lines.append(f"  created_at: {item.get('created_at') or ''}")
     lines.append(f"  updated_at: {item.get('updated_at') or ''}")
     return "\n".join(lines) + "\n"
+
+def render_entity_summary(
+    entity: dict[str, Any] | None,
+    *,
+    active_step: dict[str, Any] | None = None,
+) -> str:
+    lines: list[str] = []
+    lines.append("Entity summary")
+
+    if entity is None:
+        lines.append("  state: entity not found")
+        return "\n".join(lines) + "\n"
+
+    lines.append(f"  id: {entity.get('id')}")
+    lines.append(f"  callsign: {entity.get('callsign') or ''}")
+    lines.append(f"  contour: {entity.get('contour') or ''}")
+    lines.append(f"  role: {entity.get('role') or ''}")
+    lines.append(f"  package_path: {entity.get('package_path') or ''}")
+    lines.append(f"  status: {entity.get('status') or ''}")
+    lines.append(f"  current_phase: {entity.get('current_phase') or ''}")
+    lines.append(f"  current_step_title: {entity.get('current_step_title') or ''}")
+    lines.append(f"  next_allowed_action: {entity.get('next_allowed_action') or ''}")
+
+    if entity.get("notes"):
+        lines.append(f"  notes: {entity['notes']}")
+
+    if active_step is None:
+        lines.append("  active_step: none")
+    else:
+        lines.append("  active_step:")
+        lines.append(f"    id: {active_step.get('id')}")
+        lines.append(f"    title: {active_step.get('title') or ''}")
+        lines.append(f"    phase: {active_step.get('phase') or ''}")
+        lines.append(f"    operation_type: {active_step.get('operation_type') or ''}")
+        lines.append(f"    target_path: {active_step.get('target_path') or ''}")
+        lines.append(f"    state: {active_step.get('state') or ''}")
+
+    lines.append(f"  created_at: {entity.get('created_at') or ''}")
+    lines.append(f"  updated_at: {entity.get('updated_at') or ''}")
+    return "\n".join(lines) + "\n"
+

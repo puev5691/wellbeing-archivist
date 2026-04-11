@@ -283,3 +283,123 @@ def render_steps_list(items: list[dict[str, Any]]) -> str:
             lines.append(f"  notes: {item['notes']}")
         lines.append("")
     return "\n".join(lines).rstrip() + "\n"
+
+def get_active_step(
+    db: Database,
+    *,
+    callsign: str | None = None,
+    entity_id: int | None = None,
+) -> dict[str, Any] | None:
+    entity = _get_entity_row(db, entity_id=entity_id, callsign=callsign)
+    if entity is None:
+        return None
+    item = _get_active_step_for_entity(db, int(entity["id"]))
+    if item is not None:
+        item["callsign"] = entity["callsign"]
+    return item
+
+
+def render_active_step(
+    item: dict[str, Any] | None,
+    *,
+    callsign: str | None = None,
+    entity_id: int | None = None,
+) -> str:
+    lines: list[str] = []
+    lines.append("Active step")
+
+    if item is None:
+        label = ""
+        if callsign is not None:
+            label = callsign
+        elif entity_id is not None:
+            label = str(entity_id)
+        else:
+            label = "unknown"
+
+        lines.append(f"  entity: {label}")
+        lines.append("  state: no active step")
+        return "\n".join(lines) + "\n"
+
+    lines.append(f"  id: {item['id']}")
+    lines.append(f"  callsign: {item.get('callsign') or ''}")
+    lines.append(f"  title: {item['title']}")
+    lines.append(f"  phase: {item['phase']}")
+    lines.append(f"  operation_type: {item['operation_type']}")
+    lines.append(f"  target_path: {item['target_path']}")
+    lines.append(f"  state: {item['state']}")
+    lines.append(f"  issued_at: {item.get('issued_at') or ''}")
+    lines.append(f"  executed_at: {item.get('executed_at') or ''}")
+    lines.append(f"  confirmed_at: {item.get('confirmed_at') or ''}")
+    lines.append(f"  success_evidence: {item.get('success_evidence') or ''}")
+    if item.get("notes"):
+        lines.append(f"  notes: {item['notes']}")
+    return "\n".join(lines) + "\n"
+
+def list_confirmed_steps(
+    db: Database,
+    *,
+    callsign: str | None = None,
+    entity_id: int | None = None,
+) -> list[dict[str, Any]]:
+    where_clauses: list[str] = ["s.state = ?"]
+    params: list[Any] = [STEP_STATE_CONFIRMED]
+
+    if callsign is not None:
+        where_clauses.append("e.callsign = ?")
+        params.append(callsign)
+    if entity_id is not None:
+        where_clauses.append("s.entity_id = ?")
+        params.append(entity_id)
+
+    where_sql = "WHERE " + " AND ".join(where_clauses)
+
+    sql = f"""
+        SELECT
+            s.id,
+            s.entity_id,
+            e.callsign,
+            s.title,
+            s.phase,
+            s.operation_type,
+            s.target_path,
+            s.state,
+            s.issued_at,
+            s.executed_at,
+            s.confirmed_at,
+            s.success_evidence,
+            s.notes
+        FROM steps s
+        JOIN entities e ON e.id = s.entity_id
+        {where_sql}
+        ORDER BY s.id DESC
+    """
+
+    with db.connect() as conn:
+        rows = conn.execute(sql, tuple(params)).fetchall()
+    return [dict(row) for row in rows]
+
+
+def render_confirmed_steps_list(items: list[dict[str, Any]]) -> str:
+    lines: list[str] = []
+    lines.append("Confirmed steps")
+    lines.append(f"  total: {len(items)}")
+    lines.append("")
+    if not items:
+        lines.append("No confirmed steps found.")
+        return "\n".join(lines) + "\n"
+
+    for item in items:
+        lines.append(f"[{item['id']}] {item['callsign']}")
+        lines.append(f"  title: {item['title']}")
+        lines.append(f"  phase: {item['phase']}")
+        lines.append(f"  operation_type: {item['operation_type']}")
+        lines.append(f"  target_path: {item['target_path']}")
+        lines.append(f"  state: {item['state']}")
+        lines.append(f"  confirmed_at: {item.get('confirmed_at') or ''}")
+        lines.append(f"  success_evidence: {item.get('success_evidence') or ''}")
+        if item.get("notes"):
+            lines.append(f"  notes: {item['notes']}")
+        lines.append("")
+    return "\n".join(lines).rstrip() + "\n"
+
