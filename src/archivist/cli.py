@@ -20,6 +20,13 @@ from .repo_manifest import build_repo_manifest, render_repo_manifest, default_re
 from .repo_profile import build_repo_profile, render_repo_profile, default_repo_profile_output_path
 from .repo_start_context import build_repo_start_context, render_repo_start_context, default_repo_start_context_output_path
 from .service_layer import build_service_query_payload
+from .bootstrap_packages import (
+    DEFAULT_BOOTSTRAP_PACKAGES_ROOT,
+    collect_bootstrap_package_summary,
+    list_bootstrap_packages,
+    render_bootstrap_package_summary,
+    render_bootstrap_packages_list,
+)
 from .path_abstraction import (
     build_path_roots,
     build_path_roots_detailed,
@@ -335,6 +342,26 @@ def build_parser() -> argparse.ArgumentParser:
         help="Override root in KEY=VALUE form; may be repeated",
     )
 
+    list_bootstrap_packages_cmd = subparsers.add_parser(
+        "list-bootstrap-packages",
+        help="List bootstrap packages from a packages root",
+    )
+    list_bootstrap_packages_cmd.add_argument(
+        "packages_root",
+        nargs="?",
+        default=DEFAULT_BOOTSTRAP_PACKAGES_ROOT,
+        help="Root directory with bootstrap packages",
+    )
+
+    show_bootstrap_package_summary_cmd = subparsers.add_parser(
+        "show-bootstrap-package-summary",
+        help="Show summary for a bootstrap package directory",
+    )
+    show_bootstrap_package_summary_cmd.add_argument(
+        "package_dir",
+        help="Bootstrap package directory",
+    )
+
     return parser
 
 
@@ -412,6 +439,10 @@ def main() -> int:
         return cmd_resolve_logical_path(args)
     if args.command == "split-absolute-path":
         return cmd_split_absolute_path(args)
+    if args.command == "list-bootstrap-packages":
+        return cmd_list_bootstrap_packages(args)
+    if args.command == "show-bootstrap-package-summary":
+        return cmd_show_bootstrap_package_summary(args)
 
     parser.error(f"Unknown command: {args.command}")
     return 2
@@ -669,6 +700,18 @@ def cmd_split_absolute_path(args) -> int:
         absolute_path=args.absolute_path,
     )
     print(render_split_path(item), end="")
+    return 0
+
+
+def cmd_list_bootstrap_packages(args) -> int:
+    items = list_bootstrap_packages(args.packages_root)
+    print(render_bootstrap_packages_list(items), end="")
+    return 0
+
+
+def cmd_show_bootstrap_package_summary(args) -> int:
+    item = collect_bootstrap_package_summary(args.package_dir)
+    print(render_bootstrap_package_summary(item), end="")
     return 0
 
 

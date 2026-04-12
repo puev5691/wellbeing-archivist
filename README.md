@@ -29,6 +29,9 @@
   - `show-path-roots`
   - `resolve-logical-path`
   - `split-absolute-path`
+- первый мост к bootstrap repository
+  - `list-bootstrap-packages`
+  - `show-bootstrap-package-summary`
 
 ## Что это означает
 
@@ -45,6 +48,7 @@
 - локальный сервисный вход для машинно-читаемого запроса данных
 - вынесенный service-layer, отделённый от argparse-оболочки CLI
 - path roots с различением источника и предупреждениями о конфликте корней
+- bootstrap packages как отдельный различимый класс объектов
 
 ## Что уже подтверждено практикой
 
@@ -64,12 +68,14 @@
 - `service-query` проверен на JSON-ответе для `Редактора`
 - service-layer успешно вынесен в отдельный локальный модуль без поломки JSON-контракта
 - path roots нормализованы так, что канонический источник истины определяется через `config.path_roots`
+- bootstrap summary bridge проверен на четырёх базовых initiation packages
 
 ## Чего пока не хватает
 
 Следующие возможности ещё не считаются реализованными полностью и относятся к следующей фазе:
 
-- связка bootstrap-материалов с Архивариусом
+- bootstrap manifest tracing как часть service-layer
+- source context package tracing как отдельный слой
 - дальнейшая нормализация исторических и регистрационных полей сущности
 - отдельный реестр артефактов как самостоятельный слой
 - сервисный/API-слой для автоматизированного доступа между Сущностями вне CLI
@@ -220,6 +226,11 @@
     list-confirmed-steps
     list-recent-artifacts
     service-query
+    show-path-roots
+    resolve-logical-path
+    split-absolute-path
+    list-bootstrap-packages
+    show-bootstrap-package-summary
 
 ## Типовой рабочий цикл
 
