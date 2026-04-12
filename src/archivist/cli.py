@@ -20,6 +20,16 @@ from .repo_manifest import build_repo_manifest, render_repo_manifest, default_re
 from .repo_profile import build_repo_profile, render_repo_profile, default_repo_profile_output_path
 from .repo_start_context import build_repo_start_context, render_repo_start_context, default_repo_start_context_output_path
 from .service_layer import build_service_query_payload
+from .path_abstraction import (
+    build_path_roots,
+    build_path_roots_detailed,
+    parse_root_overrides,
+    render_path_roots,
+    render_resolved_path,
+    render_split_path,
+    resolve_logical_path,
+    split_absolute_path,
+)
 from .entities_registry import (
     ensure_entities_table,
     get_entity_state,
@@ -289,6 +299,42 @@ def build_parser() -> argparse.ArgumentParser:
     service_query_group.add_argument("--entity-id", dest="entity_id", type=int, help="Entity id")
     service_query_cmd.add_argument("--limit", type=int, default=10, help="Maximum number of results for list-style queries")
 
+    show_path_roots_cmd = subparsers.add_parser(
+        "show-path-roots",
+        help="Show configured and resolved logical path roots",
+    )
+    show_path_roots_cmd.add_argument(
+        "--root",
+        action="append",
+        default=[],
+        help="Override root in KEY=VALUE form; may be repeated",
+    )
+
+    resolve_logical_path_cmd = subparsers.add_parser(
+        "resolve-logical-path",
+        help="Resolve root key and relative path into absolute path",
+    )
+    resolve_logical_path_cmd.add_argument("root_key", help="Logical root key")
+    resolve_logical_path_cmd.add_argument("relative_path", help="Relative path inside the root")
+    resolve_logical_path_cmd.add_argument(
+        "--root",
+        action="append",
+        default=[],
+        help="Override root in KEY=VALUE form; may be repeated",
+    )
+
+    split_absolute_path_cmd = subparsers.add_parser(
+        "split-absolute-path",
+        help="Split absolute path into root key and relative path",
+    )
+    split_absolute_path_cmd.add_argument("absolute_path", help="Absolute path to split")
+    split_absolute_path_cmd.add_argument(
+        "--root",
+        action="append",
+        default=[],
+        help="Override root in KEY=VALUE form; may be repeated",
+    )
+
     return parser
 
 
@@ -360,6 +406,12 @@ def main() -> int:
         return cmd_list_recent_artifacts(args)
     if args.command == "service-query":
         return cmd_service_query(args)
+    if args.command == "show-path-roots":
+        return cmd_show_path_roots(args)
+    if args.command == "resolve-logical-path":
+        return cmd_resolve_logical_path(args)
+    if args.command == "split-absolute-path":
+        return cmd_split_absolute_path(args)
 
     parser.error(f"Unknown command: {args.command}")
     return 2
@@ -575,6 +627,49 @@ def cmd_service_query(args) -> int:
     )
     print(json.dumps(payload, ensure_ascii=False, indent=2))
     return exit_code
+
+
+def _build_path_roots_from_args(args) -> dict[str, str]:
+    overrides = parse_root_overrides(getattr(args, "root", []))
+    return build_path_roots(
+        config_path=getattr(args, "config_path", None),
+        overrides=overrides,
+    )
+
+
+def _build_path_roots_detailed_from_args(args) -> dict[str, dict[str, str]]:
+    overrides = parse_root_overrides(getattr(args, "root", []))
+    return build_path_roots_detailed(
+        config_path=getattr(args, "config_path", None),
+        overrides=overrides,
+    )
+
+
+def cmd_show_path_roots(args) -> int:
+    details = _build_path_roots_detailed_from_args(args)
+    print(render_path_roots(details), end="")
+    return 0
+
+
+def cmd_resolve_logical_path(args) -> int:
+    roots = _build_path_roots_from_args(args)
+    item = resolve_logical_path(
+        roots,
+        root_key=args.root_key,
+        relative_path=args.relative_path,
+    )
+    print(render_resolved_path(item), end="")
+    return 0
+
+
+def cmd_split_absolute_path(args) -> int:
+    roots = _build_path_roots_from_args(args)
+    item = split_absolute_path(
+        roots,
+        absolute_path=args.absolute_path,
+    )
+    print(render_split_path(item), end="")
+    return 0
 
 
 def _db_from_args(args) -> Database:
