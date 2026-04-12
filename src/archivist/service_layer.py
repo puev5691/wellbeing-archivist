@@ -2,6 +2,12 @@ from __future__ import annotations
 
 from typing import Any
 
+from .bootstrap_packages import (
+    DEFAULT_BOOTSTRAP_PACKAGES_ROOT,
+    collect_bootstrap_package_summary,
+    list_bootstrap_packages,
+)
+
 from .db import Database
 from .entities_registry import ensure_entities_table, get_entity_state
 from .steps_registry import (
@@ -19,7 +25,40 @@ def build_service_query_payload(
     callsign: str | None = None,
     entity_id: int | None = None,
     limit: int = 10,
+    packages_root: str | None = None,
+    package_dir: str | None = None,
 ) -> tuple[dict[str, Any], int]:
+    if query_type == "bootstrap-packages":
+        root = packages_root or DEFAULT_BOOTSTRAP_PACKAGES_ROOT
+        items = list_bootstrap_packages(root)
+        if limit > 0:
+            items = items[:limit]
+        payload = {
+            "ok": True,
+            "query_type": query_type,
+            "data": {
+                "items": items,
+                "count": len(items),
+                "packages_root": str(root),
+            },
+        }
+        return payload, 0
+
+    if query_type == "bootstrap-package-summary":
+        if not package_dir:
+            payload = {
+                "ok": False,
+                "query_type": query_type,
+                "error": "package_dir_required",
+            }
+            return payload, 2
+        payload = {
+            "ok": True,
+            "query_type": query_type,
+            "data": collect_bootstrap_package_summary(package_dir),
+        }
+        return payload, 0
+
     db.init_schema()
     ensure_entities_table(db)
     ensure_steps_table(db)

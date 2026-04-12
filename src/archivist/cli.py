@@ -298,13 +298,28 @@ def build_parser() -> argparse.ArgumentParser:
     )
     service_query_cmd.add_argument(
         "query_type",
-        choices=["active-step", "entity-summary", "recent-artifacts"],
+        choices=[
+            "active-step",
+            "entity-summary",
+            "recent-artifacts",
+            "bootstrap-packages",
+            "bootstrap-package-summary",
+        ],
         help="Type of structured query",
     )
-    service_query_group = service_query_cmd.add_mutually_exclusive_group(required=True)
+    service_query_group = service_query_cmd.add_mutually_exclusive_group(required=False)
     service_query_group.add_argument("--callsign", help="Entity callsign")
     service_query_group.add_argument("--entity-id", dest="entity_id", type=int, help="Entity id")
     service_query_cmd.add_argument("--limit", type=int, default=10, help="Maximum number of results for list-style queries")
+    service_query_cmd.add_argument(
+        "--packages-root",
+        default=DEFAULT_BOOTSTRAP_PACKAGES_ROOT,
+        help="Bootstrap packages root for bootstrap service queries",
+    )
+    service_query_cmd.add_argument(
+        "--package-dir",
+        help="Bootstrap package directory for bootstrap package summary query",
+    )
 
     show_path_roots_cmd = subparsers.add_parser(
         "show-path-roots",
@@ -648,16 +663,29 @@ def cmd_list_recent_artifacts(args) -> int:
 
 
 def cmd_service_query(args) -> int:
+    entity_queries = {"active-step", "entity-summary", "recent-artifacts"}
+    if args.query_type in entity_queries:
+        if not getattr(args, "callsign", None) and getattr(args, "entity_id", None) is None:
+            payload = {
+                "ok": False,
+                "query_type": args.query_type,
+                "error": "callsign_or_entity_id_required",
+            }
+            print(json.dumps(payload, ensure_ascii=False, indent=2))
+            return 2
+
     db = _db_from_args(args)
-    payload, exit_code = build_service_query_payload(
+    payload, status = build_service_query_payload(
         db,
         query_type=args.query_type,
         callsign=getattr(args, "callsign", None),
         entity_id=getattr(args, "entity_id", None),
         limit=getattr(args, "limit", 10),
+        packages_root=getattr(args, "packages_root", None),
+        package_dir=getattr(args, "package_dir", None),
     )
     print(json.dumps(payload, ensure_ascii=False, indent=2))
-    return exit_code
+    return status
 
 
 def _build_path_roots_from_args(args) -> dict[str, str]:
