@@ -54,8 +54,8 @@ def _replace_strong_label(text: str, eng: str, ru: str, hint: str) -> str:
     return pattern.sub(f"<strong{title_attr}>{ru}:</strong>", text)
 
 def _replace_tag_text(text: str, eng: str, ru: str) -> str:
-    text = re.sub(rf">(\\s*){re.escape(eng)}(\\s*)<", f">{ru}<", text)
-    text = re.sub(rf">(\\s*){re.escape(eng)}:(\\s*)<", f">{ru}:<", text)
+    text = re.sub(rf">(\s*){re.escape(eng)}(\s*)<", f">{ru}<", text)
+    text = re.sub(rf">(\s*){re.escape(eng)}:(\s*)<", f">{ru}:<", text)
     return text
 
 def apply_html_dictionary(html_text: str, ui_dict: dict) -> str:
@@ -88,11 +88,13 @@ def apply_html_dictionary_tree(root: str | Path, dict_path: str | Path) -> dict:
     ui_dict = load_ui_dict(dict_path)
     changed = 0
     scanned = 0
-    for p in root.rglob("*.html"):
+    changed_files = []
+    for p in sorted(root.rglob("*.html")):
         scanned += 1
         original = p.read_text(encoding="utf-8")
         updated = apply_html_dictionary(original, ui_dict)
         if updated != original:
             p.write_text(updated, encoding="utf-8")
             changed += 1
-    return {"scanned": scanned, "changed": changed}
+            changed_files.append(str(p))
+    return {"scanned": scanned, "changed": changed, "changed_files": changed_files}
