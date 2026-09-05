@@ -2,7 +2,7 @@
 
 ## Смысл
 
-Этот manifest фиксирует состав кандидатного набора источников, подготовленного КАНЦЕЛЯРОМ. Файлы не считаются утверждёнными источниками до решения ОПЕРАТОРА.
+Этот manifest фиксирует состав кандидатного набора источников, подготовленного КАНЦЕЛЯРОМ и дополненного проверкой КООРДИНАТОРА. Файлы не считаются утверждёнными источниками до решения ОПЕРАТОРА.
 
 ## Repository locator
 
@@ -15,6 +15,7 @@ checksums: sha256sums.txt
 ## Состав
 
 - `KAN__source-corpus-audit__OPR.md`
+- `KOO__correction-note__OPR.md`
 - `artifact-routing-canon-v03-candidate.md`
 - `blagopoluchie-concept-core-v02-candidate.md`
 - `engineering-task-filter-v1-candidate.md`
@@ -30,12 +31,14 @@ checksums: sha256sums.txt
 package_status: published_for_operator_review
 approval_status: requires_operator_review
 
+Важно: `KOO__correction-note__OPR.md` фиксирует поправки после независимой проверки. Для большого файлового канона исправленная полная редакция подготовлена КООРДИНАТОРОМ отдельно; текущая GitHub-копия v2.2 ещё требует ручной замены ОПЕРАТОРОМ перед утверждением.
+
 ---
 
 ## Служебная карточка
 
 document_type: candidate-package-manifest
-entity: KAN
+entity: KAN + KOO review
 status: published_for_review
 project_time: generated_without_trusted_project_time
 responsibility_boundary: manifest фиксирует состав кандидатного пакета и не присваивает документам статус approved
