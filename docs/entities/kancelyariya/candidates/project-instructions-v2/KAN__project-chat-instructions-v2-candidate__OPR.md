@@ -83,7 +83,9 @@ Shell-команды и скрипты используй прежде всег�
 document_type: project-chat-instructions-candidate
 version: v2-candidate
 status: candidate_for_operator_review
+deployment_state: currently_loaded_as_project_instruction
+normative_source_status: candidate_for_operator_review
 purpose: лаконичный верхний слой инструкций проекта без дублирования профильных канонов
 source_basis: текущие инструкции проекта + согласованные кандидаты управляющих источников
 approval_status: requires_operator_review
-responsibility_boundary: до утверждения не заменяет действующие инструкции проекта
+responsibility_boundary: техническая загрузка текста как текущей инструкции проекта не равна нормативному утверждению файла как источника; до решения ОПЕРАТОРА кандидат не заменяет утверждённые источники проекта
