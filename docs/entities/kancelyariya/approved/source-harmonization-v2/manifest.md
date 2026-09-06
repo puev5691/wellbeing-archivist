@@ -4,9 +4,9 @@
 
 ОПЕРАТОР утвердил полностью блоки A, B и C финальной матрицы КООРДИНАТОРА.
 
-Этот manifest фиксирует нормативное решение поверх проверенного кандидатного пакета, не переписывая кандидатный каталог задним числом.
+Этот manifest фиксирует нормативное решение поверх проверенных кандидатных пакетов, не переписывая кандидатные каталоги задним числом.
 
-## Источник утверждённых редакций
+## Источник утверждённых редакций A/C
 
 repository: `puev5691/wellbeing-archivist`  
 ref: `main`  
@@ -25,7 +25,13 @@ candidate_checksums: `sha256sums.txt`
 - `project-instructions-core-v2-candidate.md` — `fbec13f1292739f54f04ffed0ea5c480844487ccbc07b89367a29012186a12a0`
 - `source-loading-policy-v2-candidate.md` — `cfe9f161442ec4131007f3c30f5c359286e274f1666b2aec9d9c8518f67bc524`
 
-Верхняя инструкция проекта v2 утверждена отдельным блоком B. Её финальная active-source редакция формируется без кандидатной служебной карточки.
+## Источник утверждённой верхней инструкции B
+
+candidate_path: `docs/entities/kancelyariya/candidates/project-instructions-v2/`  
+file: `KAN__project-chat-instructions-v2-candidate__OPR.md`  
+SHA-256: `96d53fb2688f656b35d8a72c1d652153ca264279738dfd6e5272ec6a27967626`
+
+Для активного использования сформирована финальная редакция без кандидатной служебной карточки: `KAN__project-chat-instructions-v2-approved__OPR.md`.
 
 ## Статус
 
