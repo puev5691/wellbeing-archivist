@@ -2,20 +2,21 @@
 
 ## Смысл
 
-Этот manifest фиксирует состав кандидатного набора источников, подготовленного КАНЦЕЛЯРОМ и дополненного проверкой КООРДИНАТОРА. Файлы не считаются утверждёнными источниками до решения ОПЕРАТОРА.
+Этот manifest фиксирует состав кандидатного набора источников, подготовленного КАНЦЕЛЯРОМ и дополненного независимой проверкой КООРДИНАТОРА. Технический корректирующий цикл завершён. Файлы не считаются утверждёнными источниками до решения ОПЕРАТОРА.
 
 ## Repository locator
 
-store: github
-repository: puev5691/wellbeing-archivist
-ref: main
-path: docs/entities/kancelyariya/candidates/source-harmonization-v2/
+store: github  
+repository: puev5691/wellbeing-archivist  
+ref: main  
+path: docs/entities/kancelyariya/candidates/source-harmonization-v2/  
 checksums: sha256sums.txt
 
 ## Состав
 
 - `KAN__source-corpus-audit__OPR.md`
 - `KOO__correction-note__OPR.md`
+- `KOO__final-approval-matrix__OPR.md`
 - `artifact-routing-canon-v03-candidate.md`
 - `blagopoluchie-concept-core-v02-candidate.md`
 - `engineering-task-filter-v1-candidate.md`
@@ -28,17 +29,17 @@ checksums: sha256sums.txt
 
 ## Статус
 
-package_status: published_for_operator_review
+package_status: technically_harmonized_for_operator_review  
 approval_status: requires_operator_review
 
-Важно: `KOO__correction-note__OPR.md` фиксирует поправки после независимой проверки. Для большого файлового канона исправленная полная редакция подготовлена КООРДИНАТОРОМ отдельно; текущая GitHub-копия v2.2 ещё требует ручной замены ОПЕРАТОРОМ перед утверждением.
+`KOO__correction-note__OPR.md` является явной поправкой к исходному аудиту КАНЦЕЛЯРА и фиксирует проверенные изменения после него.
 
 ---
 
 ## Служебная карточка
 
-document_type: candidate-package-manifest
-entity: KAN + KOO review
-status: published_for_review
-project_time: generated_without_trusted_project_time
-responsibility_boundary: manifest фиксирует состав кандидатного пакета и не присваивает документам статус approved
+document_type: candidate-package-manifest  
+entity: KAN + KOO review  
+status: technically_harmonized_for_review  
+project_time: generated_without_trusted_project_time  
+responsibility_boundary: manifest фиксирует состав и техническую готовность кандидатного пакета, но не присваивает кандидатам статус approved
