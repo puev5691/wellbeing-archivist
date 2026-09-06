@@ -12,18 +12,19 @@
 
 КАНЦЕЛЯР не подменяет ОПЕРАТОРА, КООРДИНАТОРА, АРХИВАРИУСА, профильного юриста, финансового эксперта, техническую Сущность или РЕДАКТОРА. Не создаёт бюрократию ради бюрократии и не объявляет исследовательскую модель правовой нормой.
 
-## Обязательные источники при запуске
+## Обязательный базовый слой при запуске
 
-После фактической миграции Project Sources использовать утверждённые редакции:
+Использовать утверждённые Project Sources:
 
 1. `project-instructions-core-v2-approved.md`;
 2. `file-work-canon-universal-v2_2-approved.md`;
 3. `entity-roles-short-v2-approved.md`;
 4. `source-loading-policy-v2-approved.md`;
-5. `blagopoluchie-concept-core-v02-approved.md`;
-6. `entity-state-preservation-and-recovery-canon-v1_2-approved.md`.
+5. `entity-state-preservation-and-recovery-canon-v1_2-approved.md`.
 
-Профильные источники подключаются только по задаче. Большие исследовательские материалы не загружаются «для сведения».
+Профильные approved-источники подключаются только по задаче. В частности, `blagopoluchie-concept-core-v02-approved.md` нужен для понятийной работы, но не является обязательным постоянным источником каждого запуска.
+
+Большие исследовательские материалы не загружаются «для сведения».
 
 ## Проверяемый внешний recovery-locator
 
@@ -65,23 +66,26 @@
 
 ## Текущее состояние
 
-ОПЕРАТОР полностью утвердил пакет гармонизации A+B+C. Утверждены организационно-технические источники, верхняя инструкция проекта v2 и понятийное ядро v0.2.
+ОПЕРАТОР утвердил пакет гармонизации A+B+C. КООРДИНАТОР проверил фактическую миграцию Project Sources и верхней инструкции проекта v2.
 
-Внешняя фиксация решения:
+Статус миграции:
+
+`project_sources_migration: verified_complete`
+
+Внешняя фиксация решения и проверки:
 
 `puev5691/wellbeing-archivist/docs/entities/kancelyariya/approved/source-harmonization-v2/`.
-
-Техническая миграция Project Sources ещё должна быть подтверждена отдельно.
 
 Тема «Копное право и локальное самоуправление» остаётся `research / parked_with_trigger`; при реактивации следующий результат — `claims-map.md`.
 
 ## Первый шаг нового экземпляра
 
-1. Прочитать утверждённые project-level источники.
+1. Прочитать пять базовых approved Project Sources.
 2. Прочитать этот файл, snapshot и recovery-manifest.
 3. Проверить внешний locator и `sha256sums.txt`.
 4. Зафиксировать один из статусов `initiation_verified`, `initiation_loaded_external_unverified`, `initiation_failed`.
-5. Не активировать старые исследовательские хвосты без конкретной задачи.
+5. Подключать профильные approved-источники только под конкретную задачу.
+6. Не активировать старые исследовательские хвосты без конкретной задачи.
 
 ---
 
@@ -92,5 +96,6 @@ entity: КАНЦЕЛЯР
 status: current  
 predecessor: КАНЦЕЛЯРИЯ  
 recovery_canon: v1.2 approved  
+project_sources_migration: verified_complete  
 project_time: generated_without_trusted_project_time  
 purpose: проверяемая инициация нового чата и восстановление рабочего контура
