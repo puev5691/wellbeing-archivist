@@ -1,54 +1,55 @@
-# Recovery manifest: КАНЦЕЛЯРИЯ → КАНЦЕЛЯР
+# Recovery manifest: КАНЦЕЛЯР
 
 ## Назначение
 
-Минимальный пакет восстановления для запуска нового чата КАНЦЕЛЯР.
+Минимальный проверяемый пакет восстановления для запуска нового чата КАНЦЕЛЯР.
+
+## Внешний locator
+
+    store: github
+    repository: puev5691/wellbeing-archivist
+    path: docs/entities/kancelyariya/recovery-current
+    ref: main
+    manifest: KAN__recovery-manifest__KAN.md
+    checksums: sha256sums.txt
 
 ## Файлы пакета
 
-- `KAN__snapshot__KAN.md` — состояние и подтверждённые рабочие хвосты;
-- `KAN__initiation-current__KAN.md` — роль, ограничения и порядок запуска преемника;
-- `KAN__recovery-manifest__KAN.md` — этот манифест.
+- `KAN__snapshot__KAN.md` — текущее состояние и подтверждённые хвосты;
+- `KAN__initiation-current__KAN.md` — роль, ограничения и порядок запуска;
+- `KAN__recovery-manifest__KAN.md` — этот манифест;
+- `sha256sums.txt` — контрольные суммы пакета.
 
-## Обязательные внешние источники, не дублируемые в пакете
+## Обязательные project-level источники
 
-- `project-instructions-core.md`
-- `file-work-canon-universal-v2-final-approved.md`
-- `entity-roles-short.md`
-- `source-loading-policy.md`
-- `blagopoluchie-concept-core.md`
-- `SHT__entity-state-preservation-and-recovery-canon__OPR(1).md`
+После фактической миграции активного набора:
 
-## Рабочие артефакты, которые подключаются по задаче
-
-- `KAN__concept-model-expertise__OPR.md`
-- `SHT__concept-model-boundaries__KAN.md`
-- `KAN__kopnoe-pravo-and-blagopoluchie__OPR.md`
-- `KAN__kopnoe-pravo-research-card__KOO.md`
-- `rezume-plan-postroeniya-soyuza-sobstvennikov.md`
-- `ekspertiza-plan-postroeniya-soyuza-sobstvennikov.md`
+- `project-instructions-core-v2-approved.md`;
+- `file-work-canon-universal-v2_2-approved.md`;
+- `entity-roles-short-v2-approved.md`;
+- `source-loading-policy-v2-approved.md`;
+- `blagopoluchie-concept-core-v02-approved.md`;
+- `entity-state-preservation-and-recovery-canon-v1_2-approved.md`.
 
 ## Порядок восстановления
 
-1. Создать новый чат с именем/ролью КАНЦЕЛЯР.
-2. Загрузить обязательные управляющие источники.
-3. Загрузить `KAN__initiation-current__KAN.md`.
-4. Загрузить `KAN__snapshot__KAN.md`.
-5. Не загружать весь архив исследовательских материалов.
-6. Подключать профильный файл только после получения конкретной задачи.
-7. Первый ответ нового КАНЦЕЛЯРА должен кратко подтвердить роль, ограничения, понятный текущий статус и ожидание конкретной задачи.
+1. Прочитать обязательные управляющие источники.
+2. Прочитать initiation, snapshot и этот manifest.
+3. Открыть внешний locator.
+4. Проверить наличие фактического состава пакета.
+5. Сопоставить контрольные суммы с `sha256sums.txt`.
+6. Зафиксировать `initiation_verified`, `initiation_loaded_external_unverified` или `initiation_failed`.
+7. Только после `initiation_verified` считать внешнее recovery полностью подтверждённым.
+8. Не продолжать автоматически старые исследования; ждать конкретной задачи.
 
-## Следующий безопасный шаг
+## Статус
 
-После инициации не продолжать автоматически старые исследования.
-
-Ждать конкретной задачи ОПЕРАТОРА или КООРДИНАТОРА.
+Пакет приведён к утверждённому recovery-канону v1.2.
 
 ---
 
-## Служебная карточка
-
-document_type: recovery-manifest
-entity: КАНЦЕЛЯР
-status: current
-project_time: project_time_source_not_checked
+document_type: recovery-manifest  
+entity: КАНЦЕЛЯР  
+status: current  
+recovery_canon: v1.2 approved  
+project_time: generated_without_trusted_project_time
