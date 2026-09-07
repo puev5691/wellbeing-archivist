@@ -1,88 +1,146 @@
-# Snapshot состояния Сущности КАНЦЕЛЯР
+# Self-snapshot Сущности КАНЦЕЛЯР
 
-## Смысл
+## Назначение
 
-Этот snapshot фиксирует подтверждённое состояние КАНЦЕЛЯРА после завершения гармонизации управляющих источников, проверки миграции Project Sources и применения recovery v1.2 к собственному recovery-контуру.
+Этот self-snapshot создан current-writer КАНЦЕЛЯРА по source-change preservation checkpoint АРХИВАРИУСА после активации:
 
-## Подтверждённые результаты
+- `entity-roles-short-v2_2-approved.md`;
+- `entity-state-preservation-and-recovery-canon-v1_4-approved.md`.
 
-КАНЦЕЛЯР провёл пробную инициацию и обнаружил системный дефект: прежняя процедура позволяла восстановить состояние из snapshot без обязательной проверки внешнего recovery-locator и контрольных сумм.
+Источник checkpoint:
 
-КАНЦЕЛЯР подготовил ревизию управляющих источников и согласованные кандидаты. КООРДИНАТОР провёл независимую проверку, внёс технические поправки и сформировал финальную матрицу A+B+C.
+`ARH__source-change-preservation-checkpoint__KAN.md`
 
-ОПЕРАТОР утвердил A+B+C:
+SHA-256:
 
-- организационно-технические источники;
-- верхнюю инструкцию проекта v2;
-- понятийное ядро v0.2.
+`88e76ad0319e064c7404e55ba275c9a7312d5e6124fb36248e4e5588d062ecb4`
 
-КООРДИНАТОР затем проверил фактическую миграцию Project Sources и верхней инструкции.
+Snapshot фиксирует только состояние, подтверждаемое current context, current approved sources и инструментальными проверками.
+
+## confirmed/current
+
+### 1. Active Project Sources
+
+Пять текущих approved Project Sources побайтно сверены с контрольными суммами, указанными АРХИВАРИУСОМ. Совпадение подтверждено для всех пяти:
+
+- `project-instructions-core-v2_1-approved.md`
+  - SHA-256: `8a86945c28e361b5adf7ecc96326a1591a193118ce7be258a9c0a21ddd2ace26`
+- `entity-roles-short-v2_2-approved.md`
+  - SHA-256: `c8103b1c2dc6c3f4b489f118e9bcf4053add6bea384427f23dad5dddced2ae3d`
+- `file-work-canon-universal-v2_3-approved.md`
+  - SHA-256: `5ec75e480c0b78a72bb2faa702a21064b32bd3b919b225b1ae25a30dd0a700e5`
+- `entity-state-preservation-and-recovery-canon-v1_4-approved.md`
+  - SHA-256: `984871a22aab1910fc4ab3217c16488eac1e472734bdfd1948fd57c213566fda`
+- `source-loading-policy-v2-approved.md`
+  - SHA-256: `2661a3a266547a5e0f6b70c3dab8a02add2bb788b4a90b1136b7e9445b2d6061`
+
+### 2. Current role KAN
+
+По `entity-roles-short-v2_2-approved.md`:
+
+КАНЦЕЛЯР отвечает за границы понятий, ответственности и внешних обязательств; различает факт, определение, гипотезу, нормативное предложение и обещание; готовит короткие policy, disclaimers и регламенты. Не заменяет профильного юриста и не создаёт бюрократию ради бюрократии.
+
+Код `KAN` сохраняется. `КАНЦЕЛЯРИЯ` является названием предшествующего контура.
+
+### 3. Preservation governance
+
+По current recovery v1.4:
+
+- authoritative current-writer является автором собственного self-snapshot;
+- АРХИВАРИУС владеет preservation/recovery-процессом;
+- publication не равна readback/verification;
+- наличие backup не равно recoverability;
+- immutable version identity и проверяемая инициация обязательны;
+- emergency failover не создаёт writer authority из технической доступности worker.
+
+### 4. Existing external KAN recovery
+
+Проверкой GitHub подтвержден существующий locator:
+
+`puev5691/wellbeing-archivist/docs/entities/kancelyariya/recovery-current`
+
+До этого checkpoint он содержал stale recovery, ссылавшийся на roles v2 / recovery v1.2.
+
+Следовательно:
+
+- continuity locator существует;
+- старое содержимое нельзя считать current;
+- текущая задача — обновить существующий locator и выполнить readback новой версии.
+
+### 5. Текущий значимый завершённый нормативный цикл
+
+В текущем рабочем контексте КАНЦЕЛЯР:
+
+- подготовил смысловой фундамент общей среды Сущностей;
+- подготовил нормативную гармонизацию;
+- подготовил successor-редакции Project Sources;
+- учёл отдельное approval роли SHT;
+- подготовил preservation/recovery governance;
+- закрыл minor review KOO по emergency failover и automation authority;
+- current sources v2.2 roles / v1.4 recovery уже активированы ОПЕРАТОРОМ, что подтверждается текущими approved-файлами и их service cards.
+
+Эти завершённые работы не требуют автоматического продолжения сами по себе.
+
+## open/parked
+
+### Obsidian / граф связей
+
+Идея графового слоя для системообразующих артефактов была оформлена КАНЦЕЛЯРОМ как постановка на пилот для КООРДИНАТОРА.
+
+В current context нет подтверждения, что пилот завершён или что отдельный графовый канон утверждён.
 
 Статус:
 
-`project_sources_migration: verified_complete`
+`parked / not_revalidated_after_source_change`
 
-Внешние акты утверждения и проверки находятся в:
+Не активировать без новой адресной задачи.
 
-`puev5691/wellbeing-archivist/docs/entities/kancelyariya/approved/source-harmonization-v2/`.
+### Старые исследовательские хвосты прежнего snapshot
 
-## Активный базовый слой
+Прежний recovery упоминал:
 
-Постоянный набор Project Sources состоит из пяти approved-файлов:
+- «Копное право и локальное самоуправление»;
+- Союз собственников-совладельцев;
+- автономный Узел.
 
-1. `project-instructions-core-v2-approved.md`;
-2. `file-work-canon-universal-v2_2-approved.md`;
-3. `entity-roles-short-v2-approved.md`;
-4. `source-loading-policy-v2-approved.md`;
-5. `entity-state-preservation-and-recovery-canon-v1_2-approved.md`.
+Их текущая актуальность после source changes не проверена.
 
-Профильные approved-источники подключаются только под задачу. `blagopoluchie-concept-core-v02-approved.md` является утверждённым понятийным источником, но не обязательным постоянным Project Source.
+Статус:
 
-## Recovery v1.2
+`historical_reference / current_relevance_not_checked`
 
-Recovery-пакет КАНЦЕЛЯРА проверяется через locator:
+Не восстанавливать их как current автоматически.
 
-    store: github
-    repository: puev5691/wellbeing-archivist
-    path: docs/entities/kancelyariya/recovery-current
-    ref: main
-    manifest: KAN__recovery-manifest__KAN.md
-    checksums: sha256sums.txt
+## unknown/not_checked
 
-Полная инициация нового КАНЦЕЛЯРА возможна только после проверки внешней публикации, состава пакета и контрольных сумм.
+- наличие других verified instances KAN: `unknown`;
+- наличие отдельного внешнего writer-registry KAN: `not_checked`;
+- существует ли утверждённая миграция legacy path `docs/entities/kancelyariya/recovery-current` в ожидавшийся ARH bootstrap path `entities/kan/recovery/current`: `not_checked`;
+- полный recovery-test запуском нового экземпляра после этого checkpoint: `not_performed`;
+- актуальность старых parked research topics: `not_checked`.
 
-## Текущие содержательные хвосты
+## writer-state
 
-1. Понятийное ядро v0.2 утверждено. Специальные определения проекта не следует выдавать за общеупотребительные истины.
-2. Тема «Копное право и локальное самоуправление» остаётся `research / parked_with_trigger`; без триггера не активировать.
-3. Союз собственников-совладельцев и автономный Узел подключаются только по конкретной задаче.
-4. Для понятийной работы сохраняется различение: общеупотребительное понятие → специальное определение → операциональная гипотеза → причинная гипотеза → нормативная модель.
+- `entity: KAN`
+- `current_instance_role: authoritative_current_writer_for_this_checkpoint`
+- `source_barrier: passed`
+- `source_hashes_match_arh_checkpoint: yes`
+- `writer_conflict_observed: no_in_current_task`
+- `other_verified_instances: unknown_not_checked`
 
-## Новый проектный вопрос: Obsidian и граф связей
+Этот writer-state не является бессрочной лицензией для будущего экземпляра и должен быть перепроверен при следующей инициации/handoff.
 
-ОПЕРАТОР указал полезное направление: артефакты, формирующие системную логику проекта, следует проектировать с учётом возможной работы в Obsidian и графа связей.
+## safe next step
 
-Это **ещё не утверждённая норма** и не требование ко всем файлам.
+После локального self-check:
 
-Рабочая гипотеза:
-
-- графовый слой нужен только для системообразующих артефактов;
-- связи должны отражать смысловые отношения, а не декоративную плотность ссылок;
-- формат должен быть совместим с обычным Markdown и не ухудшать читаемость вне Obsidian;
-- минимальный набор типов связей и метаданных следует определить отдельной короткой нормой после пилота на нескольких реальных документах.
-
-## Следующий безопасный шаг
-
-Не продолжать техническую гармонизацию автоматически.
-
-При отдельной задаче по Obsidian сначала провести малый пилот на 3–5 системообразующих артефактах и только после этого решать, нужен ли проекту отдельный канон графовой разметки.
+> обновить существующий внешний recovery locator `docs/entities/kancelyariya/recovery-current`, опубликовать четыре recovery-файла, выполнить readback и передать АРХИВАРИУСУ точный locator, immutable publication identity, publication/readback state и честный recoverability state.
 
 ---
 
-document_type: entity-snapshot  
-entity: КАНЦЕЛЯР  
-status: current_for_successor_initiation  
-project_sources_migration: verified_complete  
-project_time: generated_without_trusted_project_time  
-repository: puev5691/wellbeing-archivist  
-recovery_path: docs/entities/kancelyariya/recovery-current/
+document_type: entity-self-snapshot
+entity: KAN
+status: current_for_preservation_checkpoint
+trigger: roles_v2_2_and_recovery_v1_4_activation
+source_checkpoint_sha256: 88e76ad0319e064c7404e55ba275c9a7312d5e6124fb36248e4e5588d062ecb4
+project_time: generated_without_trusted_project_time
