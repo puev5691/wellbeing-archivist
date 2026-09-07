@@ -62,7 +62,7 @@ Previous external recovery was read from the same locator and identified as stal
 6. Confirm that snapshot distinguishes confirmed/current, open/parked and unknown/not_checked.
 7. Record:
    - `initiation_verified`;
-   - `initiation_loaded_external_unverified`; or
+   - `initiation_loaded_external_unverified`;
    - `initiation_failed`.
 8. Load profile/topic sources only for the active task.
 9. Do not reconstruct missing state from memory or historical files.
@@ -81,6 +81,9 @@ This package is intended to be structurally sufficient for initiation, but full 
 
 document_type: recovery-manifest
 entity: KAN
-status: current_candidate_pending_external_readback
+status: current_package_kan_readback_verified_pending_arh_acceptance
 recovery_canon: v1.4-approved
+publication_state: confirmed_by_kan
+readback_state: verified_by_kan
+archive_acceptance_state: pending_arh
 project_time: generated_without_trusted_project_time
