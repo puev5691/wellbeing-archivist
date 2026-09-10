@@ -93,9 +93,10 @@ Structural sufficiency is not full recoverability. Full recoverability requires 
 
 document_type: recovery-manifest
 entity: KAN
-status: current_package_pending_external_readback
+status: current_package_kan_readback_verified_pending_arh_acceptance
 recovery_canon: v1.4-approved
-publication_state: pending_by_kan
-readback_state: pending_by_kan
+publication_state: confirmed_by_kan
+readback_state: verified_by_kan
 archive_acceptance_state: pending_arh
+recoverability_state: structurally_ready_pending_arh_verification_and_practical_initiation_test
 project_time: omitted; trusted project-time source not used
