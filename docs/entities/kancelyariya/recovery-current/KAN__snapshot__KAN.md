@@ -2,26 +2,20 @@
 
 ## Назначение
 
-Этот self-snapshot создан current-writer КАНЦЕЛЯРА по source-change preservation checkpoint АРХИВАРИУСА после активации:
+Этот snapshot фиксирует current-state KAN после завершения срочного speech-этапа, проверки GitHub-поля и консолидации практики мониторинга.
 
-- `entity-roles-short-v2_2-approved.md`;
-- `entity-state-preservation-and-recovery-canon-v1_4-approved.md`.
-
-Источник checkpoint:
-
-`ARH__source-change-preservation-checkpoint__KAN.md`
-
-SHA-256:
-
-`88e76ad0319e064c7404e55ba275c9a7312d5e6124fb36248e4e5588d062ecb4`
-
-Snapshot фиксирует только состояние, подтверждаемое current context, current approved sources и инструментальными проверками.
+Источник истины для snapshot:
+- current approved Project Sources;
+- текущий диалог ОПЕРАТОРА с KAN;
+- проверенные GitHub locator/version identities;
+- подтверждённое состояние автоматизаций;
+- локально существующий значимый артефакт, если его внешняя доставка не доказана.
 
 ## confirmed/current
 
 ### 1. Active Project Sources
 
-Пять текущих approved Project Sources побайтно сверены с контрольными суммами, указанными АРХИВАРИУСОМ. Совпадение подтверждено для всех пяти:
+Все пять current approved Project Sources повторно побайтно сверены перед этим checkpoint:
 
 - `project-instructions-core-v2_1-approved.md`
   - SHA-256: `8a86945c28e361b5adf7ecc96326a1591a193118ce7be258a9c0a21ddd2ace26`
@@ -34,113 +28,200 @@ Snapshot фиксирует только состояние, подтвержд�
 - `source-loading-policy-v2-approved.md`
   - SHA-256: `2661a3a266547a5e0f6b70c3dab8a02add2bb788b4a90b1136b7e9445b2d6061`
 
-### 2. Current role KAN
+Source barrier: `passed`.
 
-По `entity-roles-short-v2_2-approved.md`:
+### 2. Current role
 
-КАНЦЕЛЯР отвечает за границы понятий, ответственности и внешних обязательств; различает факт, определение, гипотезу, нормативное предложение и обещание; готовит короткие policy, disclaimers и регламенты. Не заменяет профильного юриста и не создаёт бюрократию ради бюрократии.
+KAN удерживает границы понятий, ответственности и внешних обязательств; различает факт, определение, гипотезу, normative proposal и promise; готовит policy/disclaimer/regulation в пределах роли. Не заменяет профильного юриста.
 
-Код `KAN` сохраняется. `КАНЦЕЛЯРИЯ` является названием предшествующего контура.
+### 3. Завершённый speech-этап
 
-### 3. Preservation governance
+#### KOO: юридико-смысловая карта
 
-По current recovery v1.4:
+Artifact:
 
-- authoritative current-writer является автором собственного self-snapshot;
-- АРХИВАРИУС владеет preservation/recovery-процессом;
-- publication не равна readback/verification;
-- наличие backup не равно recoverability;
-- immutable version identity и проверяемая инициация обязательны;
-- emergency failover не создаёт writer authority из технической доступности worker.
+`entities/kancelar/outbox/KAN__speech-legal-semantic-map__KOO.md`
 
-### 4. Existing external KAN recovery
+Immutable identity:
+- commit: `649780fb0eef8e6bf441dcd7986def6f364ad727`
+- blob: `dda9215c1084e003edd0064322db3377e9174cde`
 
-Проверкой GitHub подтвержден существующий locator:
+Dispatch:
+
+`routes/dispatch/KAN__speech-legal-semantic-map__KOO.md`
+
+Inbox pointer:
+
+`entities/koordinator/inbox/KAN__speech-legal-semantic-map__KOO.md`
+
+Состояние:
+- result created: yes
+- publication: verified
+- dispatch: verified
+- inbox pointer: verified
+- KOO receipt: not observed at checkpoint
+- KOO content acceptance/revision: not observed at checkpoint
+
+#### ARH: границы публичных утверждений
+
+Artifact:
+
+`entities/kancelar/outbox/KAN__speech-claims-boundary__ARH.md`
+
+Immutable identity:
+- commit: `c8a4315f75e0ce7f8fe62642893150fee743b8dc`
+- blob: `9559858a27cc7d105a1eff5c32c2e515ae9c0f93`
+
+Dispatch:
+
+`routes/dispatch/KAN__speech-claims-boundary__ARH.md`
+
+Inbox pointer:
+
+`entities/archivarius/inbox/KAN__speech-claims-boundary__ARH.md`
+
+Состояние:
+- result created: yes
+- publication: verified
+- dispatch: verified
+- inbox pointer: verified
+- ARH receipt: not observed at checkpoint
+- ARH content acceptance/revision: not observed at checkpoint
+
+### 4. Подтверждённый activation boundary
+
+После адресной доставки результата ARH detector зафиксировал:
+
+- `detector_status: PASS`
+- `activation_requested: yes`
+- `processing_started: no`
+- `activation_status: activation_failed`
+- `failure_reason: exact_entity_chat_resume_not_supported_by_current_adapter`
+
+Activation evidence commit:
+
+`d31705975e31dbfcd41f19862284a4a687aab6ae`
+
+Вывод: `detect + classify + activation request` не равны `exact Entity-chat resume`.
+
+### 5. Консолидация GitHub-watch
+
+По подтверждённому состоянию account-level automations:
+
+- отдельные KAN/KOD/ARH/SHT GitHub-watch отключены;
+- один общий `ШТАБ GitHub Watch` активен;
+- он выполняет обнаружение, классификацию и маршрутизацию событий, но не должен исполнять профильную работу за Сущности.
+
+Это состояние требует повторной проверки при новой инициации и не считается вечным свойством проекта.
+
+### 6. Практика коротких research-summary
+
+ОПЕРАТОР дал рабочую вводную после нетривиального исследования/эксперимента фиксировать короткое резюме:
+
+`идея → проба → результат → успех/неудача → фиксация`
+
+При необходимости добавляются `ловушка` и `следующий безопасный шаг`.
+
+KOO также сохранил эту практику как candidate; candidate сам по себе не является новым Project Source.
+
+## open / pending
+
+### 1. Review двух speech-результатов
+
+Ожидаются независимые действия адресатов:
+- KOO review/acceptance/revision;
+- ARH receipt/acceptance/revision.
+
+KAN не создаёт receipt или acceptance за адресата.
+
+### 2. COOP concept/claim map
+
+Локально существует:
+
+`KAN__COOP-concept-claim-map__KOO.md`
+
+SHA-256:
+
+`155eba12a68aeed76f07df50a527d0494148e17e3d44de496f776a4e374844a5`
+
+Это значимый результат по понятийной карте кооперации, claim taxonomy, conflict map и evidence rules.
+
+Внешняя публикация/delivery этого файла в `wellbeing-hq` текущим checkpoint **не подтверждена**.
+
+Статус:
+
+`local_significant_artifact / external_delivery_not_verified`
+
+Не считать доставленным только потому, что файл существует локально.
+
+### 3. Legacy KAN recovery path
+
+Current verified recovery locator остаётся:
 
 `puev5691/wellbeing-archivist/docs/entities/kancelyariya/recovery-current`
 
-До этого checkpoint он содержал stale recovery, ссылавшийся на roles v2 / recovery v1.2.
+Отдельное решение о миграции имени пути не подтверждено.
 
-Следовательно:
+## parked / not revalidated
 
-- continuity locator существует;
-- старое содержимое нельзя считать current;
-- текущая задача — обновить существующий locator и выполнить readback новой версии.
+- Obsidian/graph pilot: `parked / not_revalidated_after_source_change`
+- старые исследовательские темы прежних snapshot: `historical_reference / current_relevance_not_checked`
 
-### 5. Текущий значимый завершённый нормативный цикл
+Не активировать автоматически.
 
-В текущем рабочем контексте КАНЦЕЛЯР:
+## unknown / not checked
 
-- подготовил смысловой фундамент общей среды Сущностей;
-- подготовил нормативную гармонизацию;
-- подготовил successor-редакции Project Sources;
-- учёл отдельное approval роли SHT;
-- подготовил preservation/recovery governance;
-- закрыл minor review KOO по emergency failover и automation authority;
-- current sources v2.2 roles / v1.4 recovery уже активированы ОПЕРАТОРОМ, что подтверждается текущими approved-файлами и их service cards.
+- наличие других verified KAN instances: `unknown_not_checked`
+- внешний writer-registry KAN: `not_checked`
+- полный practical recovery-test после этого checkpoint: `not_performed`
+- содержательный acceptance speech-результатов адресатами: `not_observed`
+- будущая актуальность account-level automation state: `must_reverify`
 
-Эти завершённые работы не требуют автоматического продолжения сами по себе.
+## Опыт
 
-## open/parked
+### Опыт 1: единый GitHub-watch
 
-### Obsidian / граф связей
+- **Идея:** не расходовать отдельный automation-slot на каждую Сущность.
+- **Проба:** per-Entity watches отключены, оставлен один общий `ШТАБ GitHub Watch`.
+- **Результат:** один монитор может отслеживать общее поле и определять адресата.
+- **Оценка:** успех для detection/routing, не для profile execution.
+- **Ловушка:** центральный watch не должен становиться скрытым «начальником всех Сущностей».
+- **Фиксация:** мониторинг можно централизовать, полномочия и профильное исполнение нельзя.
 
-Идея графового слоя для системообразующих артефактов была оформлена КАНЦЕЛЯРОМ как постановка на пилот для КООРДИНАТОРА.
+### Опыт 2: адресная GitHub-активация
 
-В current context нет подтверждения, что пилот завершён или что отдельный графовый канон утверждён.
+- **Идея:** адресный inbox должен приводить к пробуждению нужной Сущности.
+- **Проба:** результат KAN передан ARH через outbox → dispatch → inbox pointer.
+- **Результат:** detector увидел событие и запросил activation, но exact chat resume не поддержан текущим adapter.
+- **Оценка:** частичный успех.
+- **Фиксация:** `event detected` не равно `Entity processing started`.
 
-Статус:
+### Опыт 3: speech claim-boundary
 
-`parked / not_revalidated_after_source_change`
-
-Не активировать без новой адресной задачи.
-
-### Старые исследовательские хвосты прежнего snapshot
-
-Прежний recovery упоминал:
-
-- «Копное право и локальное самоуправление»;
-- Союз собственников-совладельцев;
-- автономный Узел.
-
-Их текущая актуальность после source changes не проверена.
-
-Статус:
-
-`historical_reference / current_relevance_not_checked`
-
-Не восстанавливать их как current автоматически.
-
-## unknown/not_checked
-
-- наличие других verified instances KAN: `unknown`;
-- наличие отдельного внешнего writer-registry KAN: `not_checked`;
-- существует ли утверждённая миграция legacy path `docs/entities/kancelyariya/recovery-current` в ожидавшийся ARH bootstrap path `entities/kan/recovery/current`: `not_checked`;
-- полный recovery-test запуском нового экземпляра после этого checkpoint: `not_performed`;
-- актуальность старых parked research topics: `not_checked`.
+- **Идея:** отделить безопасные публичные утверждения от обещаний и неподтверждённых claims.
+- **Проба:** KAN построил legal-semantic map и отдельную claims-card.
+- **Результат:** сформированы проверяемые формулировки и immutable artifacts для KOO/ARH.
+- **Оценка:** профильная работа выполнена; acceptance адресатов ещё не подтверждён.
+- **Фиксация:** primary-source statement, verified fact, project intent, hypothesis и future possibility должны маркироваться отдельно.
 
 ## writer-state
 
 - `entity: KAN`
 - `current_instance_role: authoritative_current_writer_for_this_checkpoint`
 - `source_barrier: passed`
-- `source_hashes_match_arh_checkpoint: yes`
 - `writer_conflict_observed: no_in_current_task`
 - `other_verified_instances: unknown_not_checked`
 
-Этот writer-state не является бессрочной лицензией для будущего экземпляра и должен быть перепроверен при следующей инициации/handoff.
-
 ## safe next step
 
-После локального self-check:
+После внешней публикации и readback этого recovery:
 
-> обновить существующий внешний recovery locator `docs/entities/kancelyariya/recovery-current`, опубликовать четыре recovery-файла, выполнить readback и передать АРХИВАРИУСУ точный locator, immutable publication identity, publication/readback state и честный recoverability state.
+> АРХИВАРИУС независимо проверяет package/version и учитывает его в recovery-процессе. KAN затем не создаёт новую содержательную работу самовольно: проверяет KOO/ARH review по speech-результатам и новые адресные задания. Отдельно остаётся unresolved delivery-status локального `KAN__COOP-concept-claim-map__KOO.md`.
 
 ---
 
 document_type: entity-self-snapshot
 entity: KAN
 status: current_for_preservation_checkpoint
-trigger: roles_v2_2_and_recovery_v1_4_activation
-source_checkpoint_sha256: 88e76ad0319e064c7404e55ba275c9a7312d5e6124fb36248e4e5588d062ecb4
-project_time: generated_without_trusted_project_time
+trigger: significant_speech_results_and_operational_learning
+project_time: omitted; trusted project-time source not used
