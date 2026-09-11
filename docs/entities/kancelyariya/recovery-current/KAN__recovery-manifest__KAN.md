@@ -86,20 +86,20 @@
 
 ## Preservation/readback boundary
 
-Publication is not readback. Final publication/readback state is fixed only after external fetch of the final package version.
+KAN выполнил immutable external readback staged package и проверил доступность initiation/snapshot/manifest/checksum table. Финальная версия checksum file обновляется после перевода manifest в readback-verified state и затем повторно читается по финальному immutable commit.
 
 ## Recoverability boundary
 
-Previous package was structurally accepted by ARH. This new package preserves that history but still does not claim full recoverability without practical initiation testing.
+Предыдущий package был structurally accepted АРХИВАРИУСОМ. Новый package сохраняет это подтверждённое состояние, но не заявляет full recoverability без practical initiation test и независимой ARH-проверки нового checkpoint.
 
 ---
 
 document_type: recovery-manifest
 entity: KAN
-status: current_package_pending_external_readback
+status: current_package_kan_readback_verified_pending_arh_acceptance
 recovery_canon: v1.4-approved
-publication_state: pending_by_kan
-readback_state: pending_by_kan
+publication_state: confirmed_by_kan
+readback_state: verified_by_kan
 archive_acceptance_state: pending_arh_for_this_checkpoint
 recoverability_state: practical_initiation_test_required_for_full_verification
 project_time: omitted; trusted project-time source not used
