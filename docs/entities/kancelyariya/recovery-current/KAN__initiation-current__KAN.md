@@ -6,21 +6,23 @@
 
 КАНЦЕЛЯР удерживает границы понятий, ответственности и внешних обязательств; различает факт, определение, гипотезу, нормативное предложение и обещание; готовит короткие policy, disclaimers и регламенты. Не заменяет профильного юриста и не создаёт бюрократию ради бюрократии.
 
-Сущность является устойчивой логической проектной единицей роли и действия. Конкретный чат является экземпляром, а не долговременной памятью Сущности.
+Сущность является устойчивой логической единицей роли и действия. Конкретный чат, процесс или runtime — сменяемый экземпляр, а не долговременная память Сущности.
 
 ## Обязательный базовый слой
 
-Перед подтверждением инициации прочитать и проверить пять current approved Project Sources:
+Перед подтверждением инициации проверить пять current approved Project Sources:
 
 1. `project-instructions-core-v2_1-approved.md`
-2. `entity-roles-short-v2_2-approved.md`
+2. `entity-roles-short-v2_3-approved.md`
 3. `file-work-canon-universal-v2_3-approved.md`
 4. `entity-state-preservation-and-recovery-canon-v1_4-approved.md`
 5. `source-loading-policy-v2-approved.md`
 
-Контрольные суммы действующего базового слоя находятся в `KAN__recovery-manifest__KAN.md`.
+`entity-roles-short-v2_3-approved.md` supersedes v2.2. Его SHA-256:
+`e50df08b5d11765ac5e38197b298ad476333e5f14e717e13a631f9d802dfe10a`.
 
-Кандидаты, drafts, старые snapshot и исторические материалы не становятся current только из-за наличия в репозитории.
+Approved source locator:
+`puev5691/wellbeing-archivist/docs/entities/kancelyariya/approved/shd-staff-role-v2_3/entity-roles-short-v2_3-approved.md@4254dd8e1154433b57bc06e1b1eaa1f75531ba57`.
 
 ## Внешний recovery locator
 
@@ -31,85 +33,82 @@
     manifest: KAN__recovery-manifest__KAN.md
     checksums: sha256sums.txt
 
-Legacy-path сохраняется до отдельного подтверждённого решения о миграции.
+Legacy-path сохраняется до отдельного утверждённого решения о миграции.
 
 ## Инициация по recovery v1.4
 
 Новый экземпляр:
 
-1. проверяет пять approved Project Sources;
-2. читает initiation, snapshot и manifest;
+1. проверяет пять approved Project Sources и SHA;
+2. читает initiation, snapshot, manifest и checksum table;
 3. открывает внешний recovery locator;
-4. проверяет `sha256sums.txt`;
-5. сопоставляет immutable identities значимых внешних результатов;
-6. выполняет обязательный GitHub-preflight `puev5691/wellbeing-hq`: KAN inbox/outbox, dispatch, receipts, свежие commits и связанные current/recovery/activation материалы;
+4. проверяет содержательные recovery-файлы по `sha256sums.txt`;
+5. выполняет fresh GitHub-preflight `puev5691/wellbeing-hq`: KAN inbox/outbox, dispatch, receipts, свежие commits и связанные current/recovery/activation материалы;
+6. сопоставляет immutable identities незавершённых и значимых результатов;
 7. фиксирует `initiation_verified`, `initiation_loaded_external_unverified` либо `initiation_failed`.
 
 Новый экземпляр не наследует скрытую память прежнего чата как факт.
 
-Self-snapshot создаёт authoritative current-writer KAN. АРХИВАРИУС владеет preservation/recovery-процессом, но не переписывает self-state КАНЦЕЛЯРА.
-
 ## Текущее подтверждённое состояние
 
-### GitHub information-entry Stage A
+### Source change: SHD / v2.3
 
-KAN-result:
+KOO notification:
+`entities/koordinator/outbox/KOO__shd-staff-role-update__ALL.md@2d4046ef5b9ad52130bd00b517efd677180e1b52`.
 
-`entities/kancelar/outbox/KAN__github-info-entry-public-legal-boundary__KOO.md`
+Подтверждено:
+- SHD / ШАРДОВИК является штатной Сущностью ШТАБА;
+- SHD — технический интегратор-диагност;
+- SIS/KOD/SHD входят в будущую программную группу;
+- будущий программный контур имеет статус `planned_not_separately_activated`;
+- SHD не подменяет KOD/SIS и не получает high-impact authority автоматически.
 
-- result commit: `6545a413dab7cc29e1d8485176402f24c23367f9`
-- result blob: `e071667b6b124060a49b9c86f653b7703ad3f9af`
-- KOO decision: `entities/koordinator/outbox/KOO__github-info-entry-kan-decision__KAN.md`
-- decision commit: `c1a0b52e44559678ec299cc8dbcdcd0ac7961e16`
-- status: `ACCEPTED_BOUNDED_STAGE_A_WORKING_RESULT`
-- KAN receipt of decision: `routes/receipts/KOO__github-info-entry-kan-decision__KAN.receipt.md`
-- receipt commit: `6d3f037b69bb901138acabee8f0d9891ddab7eff`
+### Entity Runner
 
-По решению KOO дополнительная Stage A работа KAN не требуется, пока не придёт новая точная зависимость.
+KAN research/program artifacts сохранены в `wellbeing-hq`.
 
-### Speech legal-semantic guidance
+Current technical gate:
+- corrected package integrity: PASS;
+- KOO integrity decision: `INTEGRITY_GATE_PASS_FOR_BOUNDED_NEXT_STAGE`;
+- SIS получил только preparation/readiness stage;
+- provider-side action/credential use: **not authorized**.
 
-KAN-result:
+Не считать package-integrity PASS runtime/provider PASS.
 
-`entities/kancelar/outbox/KAN__speech-legal-semantic-map__KOO.md`
+### Literary publication «Сначала она была выдумана»
 
-- result commit: `649780fb0eef8e6bf441dcd7986def6f364ad727`
-- KOO decision: `entities/koordinator/outbox/KOO__speech-legal-semantic-map-decision__KAN.md`
-- decision commit: `8e7088c3c94e668c961d1e666bcc05cc9435029b`
-- status: `ACCEPTED_AS_BOUNDED_SPEECH_GUIDANCE`
-- KAN receipt of decision: `routes/receipts/KOO__speech-legal-semantic-map-decision__KAN.receipt.md`
-- receipt commit: `b5d4fc04428ff958c5d54e062054044e8da4e5d5`
+KAN after explicit OPERATOR clarification:
+`entities/kancelar/outbox/KAN__snachala-ona-byla-vydumana-v02-operator-delta__KOO.md@63f96bb7483dec2789cff5da63a061cab368c022`.
 
-Решение не создаёт нового speech drafting task. Границы следует сохранять при будущих профильных проверках.
+Current direction:
+- public use of character names authorized by OPERATOR;
+- military/service background allowed as authorial framing about resilience and practical work, without operational secrets or universal claims;
+- token theme remains and is framed as developing accounting/participation concept linked to МЕРА;
+- МЕРА/universal contribution metric/distribution formula are not finalized and must not be presented as guaranteed mechanism;
+- RED v0.3 task has been routed by KOO;
+- publication remains unauthorized pending RED v0.3 and short KAN delta review.
 
-### Preservation
+### Prior accepted KAN boundaries
 
-Предыдущий recovery package:
-
-`puev5691/wellbeing-archivist/docs/entities/kancelyariya/recovery-current@97d12b996f3a68cf757d7d2aa4389f4310dca6ed`
-
-независимо проверен АРХИВАРИУСОМ.
-
-Состояние:
-- `archive_preservation_state: accepted_structurally`
-- `immutable_readback_state: verified_by_arh`
-- `recoverability_state: practical_initiation_test_required_for_full_verification`
-
-Полный recoverability-test новым экземпляром ещё не считается выполненным.
+- GitHub information-entry Stage A: `ACCEPTED_BOUNDED_STAGE_A_WORKING_RESULT`.
+- Speech legal-semantic map: `ACCEPTED_AS_BOUNDED_SPEECH_GUIDANCE`.
+- Recovery checkpoint `e2b861fdf33f87048242043efacf003eec4a91ab` was independently accepted structurally by ARH; full recoverability still requires practical cold-start.
 
 ## Открытые зависимости
 
-1. Новых содержательных задач KAN после двух bounded acceptance-решений в текущем preflight не подтверждено.
-2. Practical cold-start initiation test остаётся условием для `recoverability_verified`.
-3. Локальный значимый артефакт `KAN__COOP-concept-claim-map__KOO.md`, SHA-256 `155eba12a68aeed76f07df50a527d0494148e17e3d44de496f776a4e374844a5`, существует, но external publication/delivery в GitHub этим recovery не утверждается.
-4. Состояние account-level automations является изменчивым и при каждом новом экземпляре должно перепроверяться инструментально, а не наследоваться из snapshot.
+1. Practical cold-start initiation test remains required for `recoverability_verified`.
+2. RED v0.3 literary candidate is pending; do not issue publication PASS before exact delta review.
+3. Entity Runner provider runtime E2E is not yet proven; do not treat readiness/package evidence as provider processing.
+4. `KAN__COOP-concept-claim-map__KOO.md`, SHA-256 `155eba12a68aeed76f07df50a527d0494148e17e3d44de496f776a4e374844a5`, remains local significant artifact with external delivery not verified.
+5. Automation state must always be rechecked instrumentally.
 
 ## Операционные уроки
 
-- `inbox exists` / `detector PASS` / `activation requested` не означают, что Entity начала профильную работу.
-- Реальный профильный проход подтверждается чтением exact task/version, profile result, receipt и маршрутом результата.
-- Acceptance адресата является отдельным событием и не повышает bounded working result до Project Source.
-- Automation-state не является долговременной истиной recovery.
+- `detected != processing_started`.
+- `publication != delivery != receipt != acceptance`.
+- bounded acceptance does not create Project Source status.
+- source-version change must enter recovery; stale approved-source version is a real recovery defect.
+- future organizational contour membership does not mean that contour is separately activated.
 
 ## Writer-state
 
@@ -117,17 +116,15 @@ KAN-result:
 - `writer_state: authoritative_current_writer_for_this_checkpoint`
 - `other_verified_instances: unknown_not_checked`
 - `writer_conflict_observed: no_in_current_task`
-- `writer_registry_external_check: not_performed`
 
 ## Первый безопасный шаг нового экземпляра
 
 После `initiation_verified`:
-
 1. выполнить GitHub-preflight;
-2. прочитать новые KAN inbox/dispatch/receipts;
-3. не повторять уже принятые Stage A и speech задачи;
-4. не возобновлять parked/historical темы без адресной задачи;
-5. выполнить только один следующий профильный шаг, подтверждённый current evidence.
+2. сначала обработать exact addressed KAN task;
+3. не повторять уже закрытые Stage A/speech/source-update задачи;
+4. не считать старые inbox pointers открытой работой без проверки receipt/result/acceptance;
+5. выполнить только один следующий профильный шаг.
 
 ---
 
@@ -135,5 +132,6 @@ document_type: entity-initiation
 entity: KAN
 status: current
 recovery_canon: v1.4-approved
+active_role_source: entity-roles-short-v2_3-approved.md
 writer_model: one_current_writer
 project_time: omitted; trusted project-time source not used
