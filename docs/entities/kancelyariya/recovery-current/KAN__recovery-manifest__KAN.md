@@ -2,7 +2,7 @@
 
 ## Назначение
 
-Минимальный recovery-пакет KAN после bounded acceptance Stage A public/legal result и speech legal-semantic guidance.
+Минимальный recovery-пакет KAN после перехода approved role-source с v2.2 на v2.3 и фиксации текущих значимых задач.
 
 ## External locator
 
@@ -20,42 +20,49 @@
 - `KAN__recovery-manifest__KAN.md`
 - `sha256sums.txt`
 
-`sha256sums.txt` проверяет три содержательных recovery-файла и не включает собственный hash.
+Checksum table covers three substantive recovery files and does not include its own hash.
 
 ## Current approved Project Sources
 
 | Source | SHA-256 |
 |---|---|
 | `project-instructions-core-v2_1-approved.md` | `8a86945c28e361b5adf7ecc96326a1591a193118ce7be258a9c0a21ddd2ace26` |
-| `entity-roles-short-v2_2-approved.md` | `c8103b1c2dc6c3f4b489f118e9bcf4053add6bea384427f23dad5dddced2ae3d` |
+| `entity-roles-short-v2_3-approved.md` | `e50df08b5d11765ac5e38197b298ad476333e5f14e717e13a631f9d802dfe10a` |
 | `file-work-canon-universal-v2_3-approved.md` | `5ec75e480c0b78a72bb2faa702a21064b32bd3b919b225b1ae25a30dd0a700e5` |
 | `entity-state-preservation-and-recovery-canon-v1_4-approved.md` | `984871a22aab1910fc4ab3217c16488eac1e472734bdfd1948fd57c213566fda` |
 | `source-loading-policy-v2-approved.md` | `2661a3a266547a5e0f6b70c3dab8a02add2bb788b4a90b1136b7e9445b2d6061` |
 
-## Current significant results
+Role-source v2.3 approved locator:
+`puev5691/wellbeing-archivist/docs/entities/kancelyariya/approved/shd-staff-role-v2_3/entity-roles-short-v2_3-approved.md@4254dd8e1154433b57bc06e1b1eaa1f75531ba57`
 
-### GitHub information-entry Stage A public/legal boundary
-- artifact: `puev5691/wellbeing-hq/entities/kancelar/outbox/KAN__github-info-entry-public-legal-boundary__KOO.md`
-- result commit: `6545a413dab7cc29e1d8485176402f24c23367f9`
-- result blob: `e071667b6b124060a49b9c86f653b7703ad3f9af`
-- KOO decision commit: `c1a0b52e44559678ec299cc8dbcdcd0ac7961e16`
-- decision: `ACCEPTED_BOUNDED_STAGE_A_WORKING_RESULT`
-- KAN decision-receipt commit: `6d3f037b69bb901138acabee8f0d9891ddab7eff`
+Git blob:
+`402e229eef44de65f0a2d81a42e446d96c66189c`
 
-### Speech legal-semantic map
-- artifact: `puev5691/wellbeing-hq/entities/kancelar/outbox/KAN__speech-legal-semantic-map__KOO.md`
-- result commit: `649780fb0eef8e6bf441dcd7986def6f364ad727`
-- result blob: `dda9215c1084e003edd0064322db3377e9174cde`
-- KOO decision commit: `8e7088c3c94e668c961d1e666bcc05cc9435029b`
-- decision: `ACCEPTED_AS_BOUNDED_SPEECH_GUIDANCE`
-- KAN decision-receipt commit: `b5d4fc04428ff958c5d54e062054044e8da4e5d5`
+## Significant current evidence
 
-### Previous preservation acceptance
-- previous recovery commit: `97d12b996f3a68cf757d7d2aa4389f4310dca6ed`
-- ARH preservation state: `accepted_structurally`
-- ARH immutable readback: `verified_by_arh`
+### SHD organizational update
+- KOO artifact: `puev5691/wellbeing-hq/entities/koordinator/outbox/KOO__shd-staff-role-update__ALL.md`
+- commit: `2d4046ef5b9ad52130bd00b517efd677180e1b52`
+- blob: `10699f80fcec9038b486535cb684626aa605a0c2`
+- future software contour: `planned_not_separately_activated`
+
+### Entity Runner
+- KAN experiment program commit: `17b00c6f7fc8566730ac56da0fc8ade05589499c`
+- KAN status delta commit: `50482f21df0a544f50db7efc00dd03431f25c800`
+- corrected package commit: `f1f20fc1142d54b75f5966a82c5b045778da036c`
+- KOO integrity decision commit: `206481f0f9b3325ff26d0cef11b20e06e8c1ecc3`
+- current provider runtime state: `not_yet_proven`
+- provider-side action: `not_authorized`
+
+### Literary candidate
+- KAN operator-delta commit: `63f96bb7483dec2789cff5da63a061cab368c022`
+- RED v0.3 task commit: `888cb04781def0eb29baeace1ba7fcc042551232`
+- publication state: `not_authorized / awaiting_RED_v03_then_KAN_delta`
+
+### Previous preservation
+- previous recovery commit: `e2b861fdf33f87048242043efacf003eec4a91ab`
+- ARH structural acceptance artifact commit: `3d8aaefc2cd09b98a0a468a0024ddbfbeed8c085`
 - full recoverability: `not_yet_verified`
-- remaining gate: practical initiation test
 
 ## Local significant artifact with unresolved external delivery
 
@@ -64,42 +71,34 @@
 - state: `local_significant_artifact`
 - external_delivery: `not_verified`
 
-## Writer-state
-
-- `self_snapshot_author: KAN authoritative current-writer for this checkpoint`
-- `archive_process_owner: ARH`
-- `other_verified_instances: unknown_not_checked`
-- `writer_conflict_observed: no_in_current_task`
-
 ## Recovery procedure
 
-1. Verify five current approved Project Sources.
+1. Verify five current approved Project Sources, specifically role-source v2.3.
 2. Read initiation, snapshot and manifest.
-3. Fetch external recovery locator.
-4. Verify content files against `sha256sums.txt`.
-5. Check immutable Stage A and speech result/decision identities in `wellbeing-hq`.
-6. Run fresh KAN GitHub-preflight before selecting work.
-7. Do not treat stale inbox pointers as open work without comparing result/receipt/acceptance.
-8. Re-verify automation state instead of inheriting it.
-9. Record `initiation_verified`, `initiation_loaded_external_unverified` or `initiation_failed`.
-10. Do not reconstruct missing state from memory.
+3. Fetch external recovery locator and verify checksum table.
+4. Run fresh KAN GitHub-preflight.
+5. Check RED v0.3 / Entity Runner / source-change receipts before treating pointers as open.
+6. Re-verify automation state rather than inheriting it.
+7. Record initiation outcome.
+8. Do not reconstruct missing state from memory.
 
 ## Preservation/readback boundary
 
-KAN выполнил immutable external readback staged package и проверил доступность initiation/snapshot/manifest/checksum table. Финальная версия checksum file обновляется после перевода manifest в readback-verified state и затем повторно читается по финальному immutable commit.
+This package is staged for external publication/readback. Final readback state will be changed only after immutable fetch of all package files and checksum verification.
 
 ## Recoverability boundary
 
-Предыдущий package был structurally accepted АРХИВАРИУСОМ. Новый package сохраняет это подтверждённое состояние, но не заявляет full recoverability без practical initiation test и независимой ARH-проверки нового checkpoint.
+A source-correct current package does not by itself prove practical recoverability. Full verification still requires controlled cold-start or equivalent test.
 
 ---
 
 document_type: recovery-manifest
 entity: KAN
-status: current_package_kan_readback_verified_pending_arh_acceptance
+status: current_package_pending_external_readback
 recovery_canon: v1.4-approved
-publication_state: confirmed_by_kan
-readback_state: verified_by_kan
+active_role_source: entity-roles-short-v2_3-approved.md
+publication_state: pending_by_kan
+readback_state: pending_by_kan
 archive_acceptance_state: pending_arh_for_this_checkpoint
 recoverability_state: practical_initiation_test_required_for_full_verification
 project_time: omitted; trusted project-time source not used
