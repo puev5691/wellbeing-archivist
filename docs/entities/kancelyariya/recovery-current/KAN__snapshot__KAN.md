@@ -2,24 +2,22 @@
 
 ## Назначение
 
-Этот snapshot фиксирует current-state KAN после bounded acceptance двух значимых результатов КАНЦЕЛЯРА и обработки входящих решений KOO.
+Current-state KAN после:
+- source transition `entity-roles-short-v2_2 → v2_3`;
+- интеграции штатной роли SHD;
+- Entity Runner research/program handoff;
+- явного OPERATOR clarification по литературному candidate;
+- маршрутизации RED v0.3.
 
-Источник истины:
-- current approved Project Sources;
-- проверяемые GitHub locator/version identities;
-- явные KOO/ARH решения;
-- подтверждённые tool results текущего прохода.
+Источник истины: current approved Project Sources, immutable GitHub evidence и явные решения ОПЕРАТОРА/KOO/ARH.
 
-## confirmed/current
-
-### 1. Active Project Sources
-
-Current approved set остаётся:
+## 1. Active Project Sources
 
 - `project-instructions-core-v2_1-approved.md`
   - SHA-256: `8a86945c28e361b5adf7ecc96326a1591a193118ce7be258a9c0a21ddd2ace26`
-- `entity-roles-short-v2_2-approved.md`
-  - SHA-256: `c8103b1c2dc6c3f4b489f118e9bcf4053add6bea384427f23dad5dddced2ae3d`
+- `entity-roles-short-v2_3-approved.md`
+  - SHA-256: `e50df08b5d11765ac5e38197b298ad476333e5f14e717e13a631f9d802dfe10a`
+  - supersedes v2.2
 - `file-work-canon-universal-v2_3-approved.md`
   - SHA-256: `5ec75e480c0b78a72bb2faa702a21064b32bd3b919b225b1ae25a30dd0a700e5`
 - `entity-state-preservation-and-recovery-canon-v1_4-approved.md`
@@ -27,201 +25,143 @@ Current approved set остаётся:
 - `source-loading-policy-v2-approved.md`
   - SHA-256: `2661a3a266547a5e0f6b70c3dab8a02add2bb788b4a90b1136b7e9445b2d6061`
 
-Source barrier для этой линии ранее пройден; новых Project Sources текущим checkpoint не создаётся.
+v2.3 approved locator:
+`puev5691/wellbeing-archivist/docs/entities/kancelyariya/approved/shd-staff-role-v2_3/entity-roles-short-v2_3-approved.md@4254dd8e1154433b57bc06e1b1eaa1f75531ba57`.
 
-### 2. Current role
+## 2. Current KAN role
 
 KAN отвечает за границы понятий, ответственности и внешних обязательств; различает факт, определение, гипотезу, нормативное предложение и обещание; готовит bounded policy/disclaimer/regulation. Не заменяет профильного юриста.
 
-### 3. GitHub information-entry Stage A — KAN gate закрыт в bounded границе
+## 3. SHD organizational source update
 
-KAN artifact:
+KOO artifact:
+`entities/koordinator/outbox/KOO__shd-staff-role-update__ALL.md`
 
-`entities/kancelar/outbox/KAN__github-info-entry-public-legal-boundary__KOO.md`
+commit:
+`2d4046ef5b9ad52130bd00b517efd677180e1b52`
 
-- commit: `6545a413dab7cc29e1d8485176402f24c23367f9`
-- blob: `e071667b6b124060a49b9c86f653b7703ad3f9af`
-- SHA-256 локального идентичного результата: `85e92602e128c6829e67eff701a696fe1252a8a39ea67bc46bdeac98431155d7`
+Confirmed boundaries:
+- SHD is current staff Entity of HQ;
+- role: cross-layer technical integrator/diagnostician;
+- SHD preserves WBN/TERA2 specialization;
+- SIS/KOD/SHD are staff of the **future** software-development contour;
+- future contour status: `planned_not_separately_activated`;
+- membership does not create production authority;
+- SHD does not own code instead of KOD or infrastructure instead of SIS.
 
-KOO decision:
+## 4. Entity Runner current state
 
-`entities/koordinator/outbox/KOO__github-info-entry-kan-decision__KAN.md`
+KAN program:
+`entities/kancelar/outbox/KAN__entity-runner-experiment-program__KOO.md@17b00c6f7fc8566730ac56da0fc8ade05589499c`
 
-- commit: `c1a0b52e44559678ec299cc8dbcdcd0ac7961e16`
-- blob: `988b6a34cd046f56e305aceed0e46cebcdb8cdbf`
-- decision: `ACCEPTED_BOUNDED_STAGE_A_WORKING_RESULT`
+Status delta:
+`entities/kancelar/outbox/KAN__entity-runner-program-status__KOO.md@50482f21df0a544f50db7efc00dd03431f25c800`
 
-KAN прочитал decision по immutable commit и создал receipt:
+Current technical evidence:
+- corrected package: `entities/koder/outbox/entity-runner-candidate-v01-r1/`
+- immutable package commit: `f1f20fc1142d54b75f5966a82c5b045778da036c`
+- KOO integrity decision: `INTEGRITY_GATE_PASS_FOR_BOUNDED_NEXT_STAGE`
+- decision artifact: `entities/koordinator/outbox/KOO__entity-runner-integrity-r1-acceptance__SIS.md@206481f0f9b3325ff26d0cef11b20e06e8c1ecc3`
+- SIS next stage: preparation/readiness only;
+- provider-side action: not authorized.
 
-`routes/receipts/KOO__github-info-entry-kan-decision__KAN.receipt.md`
+Do not claim runtime/session/provider PASS until actual provider evidence exists.
 
-- receipt commit: `6d3f037b69bb901138acabee8f0d9891ddab7eff`
-- receipt blob: `ea9ee8b01bd9540c57594a6e83dde6a5a9c0d204`
+## 5. Literary/publication state
 
-Принятая граница:
-- public visibility не создаёт разрешение на reuse;
-- semantic status/provenance сохраняются;
-- `allowed / allowed-with-conditions / blocked / unknown` допустимы как bounded Stage A outcomes;
-- secrets и sensitive personal data blocked;
-- candidate/draft/research не представляются как approved/current;
-- third-party material без rights basis не зеркалируется;
-- fundraising/donation/payment и WBN/WBNP financial/investment claims остаются за отдельным authority/review;
-- KAN legal boundary не заменяет RED editorial readiness и SIS infrastructure/security review.
+Initial KAN boundary:
+`entities/kancelar/outbox/KAN__snachala-ona-byla-vydumana-public-boundary__KOO.md@86260ddae1a5278b8bbd1943d5ae80e953dc1ccc`
 
-Новые Project Sources, production publication, settings change и authority expansion этим acceptance не создаются.
+OPERATOR clarification integrated by:
+`entities/kancelar/outbox/KAN__snachala-ona-byla-vydumana-v02-operator-delta__KOO.md@63f96bb7483dec2789cff5da63a061cab368c022`
 
-### 4. Speech legal-semantic map — bounded acceptance подтверждён
+Current rules:
+- names/relationships may be public in this literary material by explicit OPERATOR authorization;
+- military/service context may be used as authorial framing of survival-school, resilience, responsibility and readiness for hard real work;
+- do not present this as a universal claim about every veteran or as secret/service disclosure;
+- project is not only for people fluent in its terminology; practical people able to learn, cooperate and perform difficult work are part of the intended human contour;
+- token concept may be described as developing accounting/participation units;
+- token quantity may be considered in a developing МЕРА-based distribution concept;
+- no guaranteed money/value/yield/exchange/fixed entitlement;
+- universal МЕРА, contribution metric and final distribution formula are not established.
 
-KAN artifact:
+KOO routed RED v0.3:
+`entities/koordinator/outbox/KOO__snachala-ona-byla-vydumana-v03__RED.md`
 
-`entities/kancelar/outbox/KAN__speech-legal-semantic-map__KOO.md`
+task commit:
+`888cb04781def0eb29baeace1ba7fcc042551232`
 
-- commit: `649780fb0eef8e6bf441dcd7986def6f364ad727`
-- blob: `dda9215c1084e003edd0064322db3377e9174cde`
+Current publication state:
+`not_authorized / awaiting_RED_v03_then_short_KAN_delta_review`.
 
-KOO decision:
+## 6. Prior stable bounded results
 
-`entities/koordinator/outbox/KOO__speech-legal-semantic-map-decision__KAN.md`
+### GitHub information-entry Stage A
+- KAN artifact commit: `6545a413dab7cc29e1d8485176402f24c23367f9`
+- KOO decision: `ACCEPTED_BOUNDED_STAGE_A_WORKING_RESULT`
 
-- commit: `8e7088c3c94e668c961d1e666bcc05cc9435029b`
-- blob: `463251c060df52f19bdfd2bb2effe5a6fa5a00e6`
-- decision: `ACCEPTED_AS_BOUNDED_SPEECH_GUIDANCE`
+### Speech legal-semantic map
+- KAN artifact commit: `649780fb0eef8e6bf441dcd7986def6f364ad727`
+- KOO decision: `ACCEPTED_AS_BOUNDED_SPEECH_GUIDANCE`
 
-KAN receipt:
+## 7. Preservation
 
-`routes/receipts/KOO__speech-legal-semantic-map-decision__KAN.receipt.md`
+Previous KAN recovery commit:
+`e2b861fdf33f87048242043efacf003eec4a91ab`
 
-- commit: `b5d4fc04428ff958c5d54e062054044e8da4e5d5`
-- blob: `77613df71054f540ce1c0ff2468f6e9f06c26464`
+ARH independent preservation result:
+`entities/archivarius/outbox/ARH__KAN-preservation-checkpoint-stageA-result__KAN.md@3d8aaefc2cd09b98a0a468a0024ddbfbeed8c085`
 
-Acceptance:
-- не превращает map в Project Source;
-- не является legal approval конкретного публичного текста;
-- не создаёт нового speech drafting task;
-- используется как bounded semantic/legal constraint при будущей редакторской работе.
-
-### 5. Speech claims boundary ARH
-
-`KAN__speech-claims-boundary__ARH.md` ранее доставлен АРХИВАРИУСУ и интегрирован им в speech source-pack. Это подтверждает downstream use результата, но snapshot не подменяет этим отдельный formal acceptance, если он не зафиксирован как таковой.
-
-### 6. Preservation предыдущего recovery package
-
-Recovery commit:
-
-`97d12b996f3a68cf757d7d2aa4389f4310dca6ed`
-
-АРХИВАРИУС независимо проверил package и зафиксировал:
-
+State:
 - `archive_preservation_state: accepted_structurally`
 - `immutable_readback_state: verified_by_arh`
-- `checksum_table_state: consistent_verified_by_arh`
-- `bytewise_sha256_recompute_state: not_performed`
 - `recoverability_state: practical_initiation_test_required_for_full_verification`
 
-ARH check artifact:
+This new source-change checkpoint supersedes that package as current recovery after final readback, but does not inherit ARH acceptance until ARH independently checks it.
 
-`entities/archivarius/outbox/ARH__KAN-preservation-check__KAN.md`
+## 8. Open / pending
 
-KAN receipt этого решения:
+1. Practical cold-start remains required for full recoverability.
+2. RED v0.3 literary candidate pending.
+3. Entity Runner provider E2E pending.
+4. Local COOP concept/claim map remains `external_delivery_not_verified`.
+5. Automation state is transient and must be rechecked.
 
-`routes/receipts/ARH__KAN-preservation-check__KAN.receipt.md`
+## 9. Experience
 
-- receipt commit: `c0f98bc03552500da17ee8a2311e1b700278321f`
+### Source changes must enter recovery
+- **Идея:** approved role-source version is part of executable recovery context.
+- **Проба:** SHD staff integration produced approved v2.3 superseding v2.2.
+- **Результат:** keeping v2.2 in KAN recovery would make a fresh instance semantically stale.
+- **Оценка:** mandatory recovery update.
+- **Фиксация:** source-version change is a state transition, not a decorative documentation update.
 
-### 7. Automation-state
-
-Текущий инструментальный preflight показал, что прежняя модель «один общий watch» больше не является текущим account-level состоянием: активны отдельные рабочие автоматизации нескольких Сущностей, а KAN watch выключен.
-
-Это **не включается как долговременная норма**. Новый экземпляр обязан повторно проверять automation-state, потому что оно изменчиво.
-
-## open / pending
-
-### 1. Practical recovery test
-
-Full `recoverability_verified` не заявляется до controlled cold-start нового KAN instance или эквивалентной проверки по current recovery package.
-
-### 2. COOP concept/claim map
-
-Локально существует:
-
-`KAN__COOP-concept-claim-map__KOO.md`
-
-SHA-256:
-
-`155eba12a68aeed76f07df50a527d0494148e17e3d44de496f776a4e374844a5`
-
-Внешняя публикация/delivery этого файла в `wellbeing-hq` текущим checkpoint не подтверждена.
-
-Статус:
-
-`local_significant_artifact / external_delivery_not_verified`
-
-Не считать доставленным без actual outbox + dispatch + recipient route.
-
-### 3. Legacy KAN recovery path
-
-Current locator остаётся:
-
-`puev5691/wellbeing-archivist/docs/entities/kancelyariya/recovery-current`
-
-Миграция path отдельно не утверждена.
-
-## parked / not revalidated
-
-- Obsidian/graph pilot: `parked / not_revalidated_after_source_change`
-- старые исследовательские темы прежних snapshot: `historical_reference / current_relevance_not_checked`
-
-## unknown / not checked
-
-- другие verified KAN instances: `unknown_not_checked`
-- внешний writer-registry KAN: `not_checked`
-- practical cold-start после этого checkpoint: `not_performed`
-- будущий automation-state: `must_reverify`
-
-## Опыт
-
-### Опыт 1: bounded acceptance не равен canon
-
-- **Идея:** после профильного результата нужен независимый downstream decision.
-- **Проба:** KAN передал Stage A matrix и speech map, KOO отдельно прочитал и принял их в ограниченной области.
-- **Результат:** оба результата usable downstream, но не стали Project Sources.
-- **Оценка:** успех.
-- **Фиксация:** `result → receipt → acceptance` является полноценной цепочкой; acceptance всегда читается буквально по scope.
-
-### Опыт 2: task pointer не доказывает execution
-
-- **Идея:** проверить реальную границу activation.
-- **Проба:** адресный task попал в KAN inbox; detector PASS не запустил exact Entity-chat.
-- **Результат:** профильная работа началась только после фактического пользовательского запуска текущего KAN и immutable task read.
-- **Оценка:** частичный технологический успех.
-- **Фиксация:** `detected != processing_started`; реальный result/receipt важнее activation marker.
-
-### Опыт 3: automation-state быстро устаревает
-
-- **Идея:** сократить число дублирующих GitHub-watch.
-- **Проба:** ранее watches были консолидированы.
-- **Результат:** позднее проект создал отдельные profile-work automations; старое состояние snapshot перестало быть текущим.
-- **Оценка:** урок.
-- **Фиксация:** automation-state нельзя хранить как долговременную истину recovery; только как observation with mandatory recheck.
+### Explicit OPERATOR clarification changes editorial target
+- **Идея:** a project-side uncertainty may be resolved directly by OPERATOR.
+- **Проба:** names/public-use, military framing and token/МЕРА direction were explicitly clarified.
+- **Результат:** old privacy blocker closed; RED v0.2 became too reductive; v0.3 required.
+- **Оценка:** success.
+- **Фиксация:** do not continue solving superseded defects after an authoritative clarification.
 
 ## writer-state
 
 - `entity: KAN`
 - `current_instance_role: authoritative_current_writer_for_this_checkpoint`
-- `source_barrier: passed`
+- `source_barrier: passed_with_v2_3`
 - `writer_conflict_observed: no_in_current_task`
 - `other_verified_instances: unknown_not_checked`
 
 ## safe next step
 
-После publication/readback этого checkpoint:
-
-> выполнить следующий GitHub-preflight; если нового exact KAN task нет, не придумывать себе содержательную работу. Отдельно остаются practical recovery test и неподтверждённая внешняя доставка локального COOP concept/claim map.
+After final external readback of this package:
+1. perform fresh GitHub-preflight;
+2. process exact KAN addressed task if present;
+3. otherwise wait for RED v0.3 / Entity Runner boundary event rather than inventing new work.
 
 ---
 
 document_type: entity-self-snapshot
 entity: KAN
-status: current_for_preservation_checkpoint
-trigger: bounded_acceptance_stageA_and_speech_decisions
+status: current_for_source_change_checkpoint
+trigger: approved_role_source_v2_3
 project_time: omitted; trusted project-time source not used
