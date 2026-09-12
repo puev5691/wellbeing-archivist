@@ -84,7 +84,16 @@ Git blob:
 
 ## Preservation/readback boundary
 
-This package is staged for external publication/readback. Final readback state will be changed only after immutable fetch of all package files and checksum verification.
+KAN performed immutable readback of the staged source-change package at commit `0746d5bd47dd41aa134b9ff427d2bf0e7a12112a`.
+
+Verified:
+- initiation SHA-256 matches checksum table;
+- snapshot SHA-256 matches checksum table;
+- manifest SHA-256 matches checksum table;
+- checksum table itself was read back immutably;
+- active role-source is v2.3 with verified SHA-256 `e50df08b5d11765ac5e38197b298ad476333e5f14e717e13a631f9d802dfe10a`.
+
+This manifest status update is finalized with a second checksum update and final immutable readback. Publication/readback does not imply ARH acceptance.
 
 ## Recoverability boundary
 
@@ -94,11 +103,11 @@ A source-correct current package does not by itself prove practical recoverabili
 
 document_type: recovery-manifest
 entity: KAN
-status: current_package_pending_external_readback
+status: current_package_kan_readback_verified_pending_arh_acceptance
 recovery_canon: v1.4-approved
 active_role_source: entity-roles-short-v2_3-approved.md
-publication_state: pending_by_kan
-readback_state: pending_by_kan
+publication_state: confirmed_by_kan
+readback_state: verified_by_kan
 archive_acceptance_state: pending_arh_for_this_checkpoint
 recoverability_state: practical_initiation_test_required_for_full_verification
 project_time: omitted; trusted project-time source not used
